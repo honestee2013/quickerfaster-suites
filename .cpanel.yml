@@ -1,0 +1,50 @@
+deployment:
+  tasks:
+    - export DEPLOY_LOG=/home/quickerf/deploy.log
+    - export APP_DIR=/home/quickerf/public_html/suites.quickerfaster.com
+    - echo "===== Deployment started at $(date) =====" >> $DEPLOY_LOG
+
+    # ✅ Ensure Laravel directories exist
+    - mkdir -p $APP_DIR/bootstrap/cache
+    - mkdir -p $APP_DIR/storage/framework/{cache,sessions,views}
+    - mkdir -p $APP_DIR/storage/logs
+
+    # ✅ Set correct permissions
+    - chmod -R 775 $APP_DIR/storage $APP_DIR/bootstrap/cache
+    - echo "[INFO] Directories and permissions set" >> $DEPLOY_LOG
+
+    # ✅ Ensure .env exists
+    - if [ ! -f "$APP_DIR/.env" ]; then cp $APP_DIR/.env.example $APP_DIR/.env && echo "[INFO] .env file created from .env.example" >> $DEPLOY_LOG; fi
+
+    # ✅ Ensure APP_URL is correct in .env
+    - sed -i 's|^APP_URL=.*|APP_URL=https://suites.quickerfaster.com|' $APP_DIR/.env
+    - echo "[INFO] APP_URL set to https://suites.quickerfaster.com" >> $DEPLOY_LOG
+
+    # ✅ Install PHP dependencies
+    - /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader --working-dir=$APP_DIR >> $DEPLOY_LOG 2>&1
+
+    # ✅ Generate APP_KEY if missing
+    - if ! grep -q "APP_KEY=base64" "$APP_DIR/.env"; then /usr/local/bin/php $APP_DIR/artisan key:generate >> $DEPLOY_LOG 2>&1 && echo "[INFO] APP_KEY generated" >> $DEPLOY_LOG; fi
+
+    # ✅ Clear and cache Laravel configurations
+    - /usr/local/bin/php $APP_DIR/artisan config:clear >> $DEPLOY_LOG 2>&1
+    - /usr/local/bin/php $APP_DIR/artisan config:cache >> $DEPLOY_LOG 2>&1
+    - /usr/local/bin/php $APP_DIR/artisan route:clear >> $DEPLOY_LOG 2>&1
+    - /usr/local/bin/php $APP_DIR/artisan route:cache >> $DEPLOY_LOG 2>&1
+    - /usr/local/bin/php $APP_DIR/artisan view:clear >> $DEPLOY_LOG 2>&1
+    - /usr/local/bin/php $APP_DIR/artisan view:cache >> $DEPLOY_LOG 2>&1
+
+    # ✅ Create storage symlink
+    - /usr/local/bin/php $APP_DIR/artisan storage:link >> $DEPLOY_LOG 2>&1
+    - echo "[INFO] storage:link completed" >> $DEPLOY_LOG
+
+    # ✅ Check index.php paths
+    - if ! grep -q "require __DIR__.'/../vendor/autoload.php';" "$APP_DIR/public/index.php"; then
+        sed -i "s|require __DIR__.'/.*vendor/autoload.php';|require '$APP_DIR/vendor/autoload.php';|" $APP_DIR/public/index.php;
+        sed -i "s|require_once __DIR__.'/.*bootstrap/app.php';|require_once '$APP_DIR/bootstrap/app.php';|" $APP_DIR/public/index.php;
+        echo "[INFO] index.php paths corrected" >> $DEPLOY_LOG;
+      else
+        echo "[INFO] index.php paths OK" >> $DEPLOY_LOG;
+      fi
+
+    - echo "===== Deployment completed at $(date) =====" >> $DEPLOY_LOG

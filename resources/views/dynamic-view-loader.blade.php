@@ -1,0 +1,1 @@
+<livewire:pages.index-page />

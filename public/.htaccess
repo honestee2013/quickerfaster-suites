@@ -1,0 +1,20 @@
+Options +FollowSymLinks
+Options +SymLinksIfOwnerMatch
+Options -MultiViews -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Ensure Authorization header passes through
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+
+    # If request is not a directory
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # If request is not a file
+    RewriteCond %{REQUEST_FILENAME} !-f
+
+    # Send everything to index.php
+    RewriteRule ^ index.php [L]
+</IfModule>
