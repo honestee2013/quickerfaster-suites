@@ -29,8 +29,12 @@ deployment:
     - /bin/sh -c 'if [ ! -f "$DEPLOYPATH/composer.phar" ]; then
         /bin/echo "Downloading Composer..." >> "$LOGFILE" &&
         cd "$DEPLOYPATH" &&
-        /usr/bin/curl -sS https://getcomposer.org/installer | php >> "$LOGFILE" 2>&1;
+        /usr/bin/curl -sS https://getcomposer.org/installer -o composer-setup.php &&
+        /opt/cpanel/php/bin/php composer-setup.php --quiet &&
+        rm composer-setup.php &&
+        /bin/echo "Composer installed successfully" >> "$LOGFILE";
       fi'
+
 
     # Install PHP dependencies using local composer.phar
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
