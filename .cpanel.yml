@@ -34,19 +34,19 @@ deployment:
 
     # Install PHP dependencies using local composer.phar
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - cd $DEPLOYPATH && /opt/cpanel/php/bin/php composer.phar install --no-dev --optimize-autoloader >> $LOGFILE 2>&1
+    - cd $DEPLOYPATH && php composer.phar install --no-dev --optimize-autoloader >> $LOGFILE 2>&1
 
     # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
-    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan migrate --force >> $LOGFILE 2>&1
+    - php $DEPLOYPATH/artisan migrate --force >> $LOGFILE 2>&1
 
     # Run seeders
     - /bin/echo "Seeding database..." >> $LOGFILE
-    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan db:seed --force >> $LOGFILE 2>&1
+    - php $DEPLOYPATH/artisan db:seed --force >> $LOGFILE 2>&1
 
     # Clear caches
     - /bin/echo "Clearing caches..." >> $LOGFILE
-    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan optimize:clear >> $LOGFILE 2>&1
+    - php $DEPLOYPATH/artisan optimize:clear >> $LOGFILE 2>&1
 
     # End log
     - /bin/echo "===== Deployment finished at $(date) =====" >> $LOGFILE
