@@ -15,13 +15,20 @@ deployment:
     - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
     - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # Sync files from repo to live site
-    - /bin/echo "Syncing files to live folder..." >> $LOGFILE
-    - rsync -av --delete \
-        --exclude=".git" \
-        --exclude=".cpanel.yml" \
-        --exclude=".env" \
-        $REPOPATH/ $DEPLOYPATH >> $LOGFILE 2>&1
+    # Simulate rsync --delete (remove old files except excluded ones)
+    - /bin/echo "Cleaning destination folder..." >> $LOGFILE
+    - find $DEPLOYPATH -mindepth 1 \
+        ! -name ".env" \
+        ! -name ".cpanel.yml" \
+        ! -path "$DEPLOYPATH/.git*" \
+        -exec rm -rf {} + >> $LOGFILE 2>&1
+
+    # Copy files using tar with exclusions
+    - /bin/echo "Copying files using tar..." >> $LOGFILE
+    - tar --exclude=".git" \
+          --exclude=".cpanel.yml" \
+          --exclude=".env" \
+          -cf - -C $REPOPATH . | tar -xf - -C $DEPLOYPATH >> $LOGFILE 2>&1
 
     # Install PHP dependencies
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
