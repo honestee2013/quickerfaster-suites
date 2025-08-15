@@ -26,7 +26,7 @@ deployment:
 
     # Install PHP dependencies
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH >> $LOGFILE 2>&1
+    - composer install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH >> $LOGFILE 2>&1
 
     # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
