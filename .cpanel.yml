@@ -1,6 +1,6 @@
 deployment:
   tasks:
-    # Paths
+    # Pathss
     - export REPOPATH=/home/quickerf/laravel_suites_repo/suites.quickerfaster.com
     - export DEPLOYPATH=/home/quickerf/public_html/suites.quickerfaster.com
     - export LOGDIR=/home/quickerf/deploy_logs
