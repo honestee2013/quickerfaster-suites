@@ -31,9 +31,7 @@ deployment:
                    $DEPLOYPATH/storage/framework/sessions \
                    $DEPLOYPATH/storage/framework/views \
                    $DEPLOYPATH/bootstrap/cache \
-                   $DEPLOYPATH/storage/logs && \
-                   /bin/chmod -R 0777 $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache && \
-                   /bin/rm -f $DEPLOYPATH/bootstrap/cache/*.php' >> $LOGFILE 2>&1
+                   $DEPLOYPATH/storage/logs' >> $LOGFILE 2>&1
 
     # Install Composer locally if missing
     - /bin/echo "Checking Composer..." >> $LOGFILE
