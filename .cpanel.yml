@@ -1,6 +1,7 @@
 deployment:
   tasks:
     # Paths
+    - export COMPOSER_BIN=/home/quickerf/composer/composer.phar
     - export REPOPATH=/home/quickerf/laravel_suites_repo/suites.quickerfaster.com
     - export DEPLOYPATH=/home/quickerf/public_html/suites.quickerfaster.com
     - export LOGDIR=/home/quickerf/deploy_logs
@@ -24,21 +25,19 @@ deployment:
     - /bin/echo "Copying files with cp..." >> $LOGFILE
     - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^(\.git|\.env|\.cpanel\.yml)$") "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
-    # Install Composer locally if missing
-    - /bin/echo "Checking Composer..." >> $LOGFILE
-    - /bin/sh -c 'if [ ! -f "$DEPLOYPATH/composer.phar" ]; then
-        /bin/echo "Downloading Composer..." >> "$LOGFILE" &&
-        cd "$DEPLOYPATH" &&
+    # Install Composer if missing
+    - /bin/sh -c 'if [ ! -f "$COMPOSER_BIN" ]; then
+        /bin/echo "Downloading Composer..." >> $LOGFILE &&
+        cd /home/quickerf &&
         /usr/bin/curl -sS https://getcomposer.org/installer -o composer-setup.php &&
         php composer-setup.php --quiet &&
         rm composer-setup.php &&
-        /bin/echo "Composer installed successfully" >> "$LOGFILE";
+        /bin/echo "Composer installed successfully" >> $LOGFILE;
       fi'
 
-
-    # Install PHP dependencies using local composer.phar
+    # Install dependencies using safe Composer path
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - cd $DEPLOYPATH && php composer.phar install --no-dev --optimize-autoloader >> $LOGFILE 2>&1
+    - php $COMPOSER_BIN install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH >> $LOGFILE 2>&1
 
     # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
