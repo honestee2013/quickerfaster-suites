@@ -2,7 +2,7 @@
 deployment:
   tasks:
     # Paths
-    - export REPOPATH=/home/quickerf/laravel_suites_repo
+    - export REPOPATH=/home/quickerf/laravel_suites_repo/suites.quickerfaster.com
     - export DEPLOYPATH=/home/quickerf/public_html/suites.quickerfaster.com
     - export LOGDIR=/home/quickerf/deploy_logs
     - mkdir -p $LOGDIR
@@ -11,13 +11,17 @@ deployment:
     # Start log
     - /bin/echo "===== Deployment started at $(date) =====" >> $LOGFILE
 
-    # Pull latest changes from GitHub
-    - /bin/echo "Pulling latest changes from GitHub into repo folder..." >> $LOGFILE
-    - /usr/bin/git -C $REPOPATH pull >> $LOGFILE 2>&1
+    # Change to repo subfolder and pull latest changes
+    - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
+    - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # Sync files from the subfolder inside repo to live site
+    # Sync files from repo to live site
     - /bin/echo "Syncing files to live folder..." >> $LOGFILE
-    - /bin/rsync -av --delete --exclude=".git" --exclude=".cpanel.yml" --exclude=".env" $REPOPATH/suites.quickerfaster.com/ $DEPLOYPATH >> $LOGFILE 2>&1
+    - /bin/rsync -av --delete \
+        --exclude=".git" \
+        --exclude=".cpanel.yml" \
+        --exclude=".env" \
+        $REPOPATH/ $DEPLOYPATH >> $LOGFILE 2>&1
 
     # Install PHP dependencies
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
