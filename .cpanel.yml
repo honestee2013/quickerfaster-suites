@@ -18,7 +18,7 @@ deployment:
     # Clean destination folder but preserve .env, .cpanel.yml, storage, bootstrap/cache
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
     - /bin/sh -c 'for f in $(/bin/ls -A "$DEPLOYPATH"); do
-        [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || [ "$f" = "storage" ] || [ "$f" = "bootstrap" ] || /bin/rm -rf "$DEPLOYPATH/$f";
+        [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || [ "$f" = "storage" ] || [ "$f" = "bootstrap/cache" ] || /bin/rm -rf "$DEPLOYPATH/$f";
       done' >> $LOGFILE 2>&1
 
     # Copy repository files to deployment path
