@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\TimeOffRequest"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\TimeOffRequest"
     pageTitle="Time Off Requests Overview"
     queryFilters=[]
     :hiddenFields="[

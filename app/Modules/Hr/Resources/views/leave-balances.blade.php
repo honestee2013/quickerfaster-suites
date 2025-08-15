@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\LeaveBalance"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\LeaveBalance"
     pageTitle="Leave Balances Overview"
     queryFilters=[]
     :hiddenFields="[

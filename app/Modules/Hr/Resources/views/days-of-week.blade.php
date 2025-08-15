@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\DayOfWeek"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\DayOfWeek"
     pageTitle="Manage Days of Week"
     queryFilters=[]
     :hiddenFields="[

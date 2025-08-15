@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\ExemptedEmployee"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\ExemptedEmployee"
     pageTitle="Exempted Employee Overview"
     queryFilters=[]
     :hiddenFields="[

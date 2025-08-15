@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\OnboardingTask"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\OnboardingTask"
     pageTitle="Onboarding Tasks Overview"
     queryFilters=[]
     :hiddenFields="[

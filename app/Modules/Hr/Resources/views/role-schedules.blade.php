@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\RoleSchedule"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\RoleSchedule"
     pageTitle="Role Schedules"
     queryFilters=[]
     :hiddenFields="[

@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\DeductionType"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\DeductionType"
     pageTitle="Deduction Types Overview"
     queryFilters=[]
     :hiddenFields="[

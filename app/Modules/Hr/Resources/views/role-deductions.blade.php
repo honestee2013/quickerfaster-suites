@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\RoleDeduction"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\RoleDeduction"
     pageTitle="Role Deductions Overview"
     queryFilters=[]
     :hiddenFields="[

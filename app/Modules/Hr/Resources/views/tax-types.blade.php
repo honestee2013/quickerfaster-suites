@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\TaxType"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\TaxType"
     pageTitle="Tax Types Overview"
     queryFilters=[]
     :hiddenFields="[

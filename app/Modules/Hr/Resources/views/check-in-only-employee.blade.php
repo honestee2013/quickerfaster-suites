@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\CheckInOnlyEmployee"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\CheckInOnlyEmployee"
     pageTitle="Check-In-Only Employee Overview"
     queryFilters=[]
     :hiddenFields="[

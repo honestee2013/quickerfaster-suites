@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\AttendanceSession"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\AttendanceSession"
     pageTitle="Daily Attendance Overview"
     queryFilters=[]
     :hiddenFields="[

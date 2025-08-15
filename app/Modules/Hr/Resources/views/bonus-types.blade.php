@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\BonusType"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\BonusType"
     pageTitle="Bonus Types Overview"
     queryFilters=[]
     :hiddenFields="[
