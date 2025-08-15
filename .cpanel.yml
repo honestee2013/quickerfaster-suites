@@ -26,10 +26,11 @@ deployment:
 
     # Install Composer locally if missing
     - /bin/echo "Checking Composer..." >> $LOGFILE
-    - if [ ! -f $DEPLOYPATH/composer.phar ]; then \
-        /bin/echo "Downloading Composer..." >> $LOGFILE && \
-        cd $DEPLOYPATH && /usr/bin/curl -sS https://getcomposer.org/installer | /opt/cpanel/php/bin/php >> $LOGFILE 2>&1; \
-      fi
+    - /bin/sh -c 'if [ ! -f "$DEPLOYPATH/composer.phar" ]; then
+        /bin/echo "Downloading Composer..." >> "$LOGFILE" &&
+        cd "$DEPLOYPATH" &&
+        /usr/bin/curl -sS https://getcomposer.org/installer | /opt/cpanel/php/bin/php >> "$LOGFILE" 2>&1;
+      fi'
 
     # Install PHP dependencies using local composer.phar
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
