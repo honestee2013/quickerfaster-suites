@@ -31,8 +31,9 @@ deployment:
                    $DEPLOYPATH/storage/framework/sessions \
                    $DEPLOYPATH/storage/framework/views \
                    $DEPLOYPATH/bootstrap/cache \
-                   $DEPLOYPATH/storage/logs' >> $LOGFILE 2>&1
-
+                   $DEPLOYPATH/storage/logs && \
+                   chmod -R 775 $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache && \
+                   rm -f $DEPLOYPATH/bootstrap/cache/*.php' >> $LOGFILE 2>&1
 
     # Install Composer locally if missing
     - /bin/echo "Checking Composer..." >> $LOGFILE
@@ -45,11 +46,18 @@ deployment:
         /bin/echo "Composer installed successfully" >> $LOGFILE;
       fi'
 
-    # Install PHP dependencies using local Composer
+    # Install PHP dependencies without running scripts (prevents cache errors)
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - /bin/sh -c 'cd "$DEPLOYPATH" && php "$COMPOSER_BIN" install --no-dev --optimize-autoloader >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'cd "$DEPLOYPATH" && php "$COMPOSER_BIN" install --no-dev --no-scripts --optimize-autoloader >> "$LOGFILE" 2>&1'
 
-    # Run Laravel migrations
+    # Run Artisan package discovery & cache commands manually
+    - /bin/echo "Running Artisan post-deploy tasks..." >> $LOGFILE
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" package:discover >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" config:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" route:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" view:cache >> "$LOGFILE" 2>&1'
+
+    # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
     - /bin/sh -c 'php "$DEPLOYPATH/artisan" migrate --force >> "$LOGFILE" 2>&1'
 
@@ -57,7 +65,7 @@ deployment:
     - /bin/echo "Seeding database..." >> $LOGFILE
     - /bin/sh -c 'php "$DEPLOYPATH/artisan" db:seed --force >> "$LOGFILE" 2>&1'
 
-    # Clear caches
+    # Clear caches as a final cleanup
     - /bin/echo "Clearing caches..." >> $LOGFILE
     - /bin/sh -c 'php "$DEPLOYPATH/artisan" optimize:clear >> "$LOGFILE" 2>&1'
 
