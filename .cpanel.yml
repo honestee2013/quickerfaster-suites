@@ -15,17 +15,18 @@ deployment:
     - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
     - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # Simulate rsync --delete (preserve exclusions)
+    # Clean destination folder but preserve .env and .cpanel.yml
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
     - /bin/sh -c 'for f in $(/bin/ls -A "$DEPLOYPATH"); do
         [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || /bin/rm -rf "$DEPLOYPATH/$f";
       done' >> $LOGFILE 2>&1
 
-    # Copy files with cp (preserve attributes)
-    - /bin/echo "Copying files with cp..." >> $LOGFILE
+    # Copy repository files to destination
+    - /bin/echo "Copying files to deployment path..." >> $LOGFILE
     - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^(\.git|\.env|\.cpanel\.yml)$") "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
-    # Install Composer if missing
+    # Install Composer locally if missing
+    - /bin/echo "Checking Composer..." >> $LOGFILE
     - /bin/sh -c 'if [ ! -f "$COMPOSER_BIN" ]; then
         /bin/echo "Downloading Composer..." >> $LOGFILE &&
         cd /home/quickerf &&
@@ -35,21 +36,21 @@ deployment:
         /bin/echo "Composer installed successfully" >> $LOGFILE;
       fi'
 
-    # Install dependencies using safe Composer path
+    # Install PHP dependencies using local Composer
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - php $COMPOSER_BIN install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH >> $LOGFILE 2>&1
+    - /bin/sh -c 'cd "$DEPLOYPATH" && php "$COMPOSER_BIN" install --no-dev --optimize-autoloader >> "$LOGFILE" 2>&1'
 
-    # Run migrations
+    # Run Laravel migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
-    - php $DEPLOYPATH/artisan migrate --force >> $LOGFILE 2>&1
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" migrate --force >> "$LOGFILE" 2>&1'
 
-    # Run seeders
+    # Seed database
     - /bin/echo "Seeding database..." >> $LOGFILE
-    - php $DEPLOYPATH/artisan db:seed --force >> $LOGFILE 2>&1
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" db:seed --force >> "$LOGFILE" 2>&1'
 
     # Clear caches
     - /bin/echo "Clearing caches..." >> $LOGFILE
-    - php $DEPLOYPATH/artisan optimize:clear >> $LOGFILE 2>&1
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" optimize:clear >> "$LOGFILE" 2>&1'
 
     # End log
     - /bin/echo "===== Deployment finished at $(date) =====" >> $LOGFILE
