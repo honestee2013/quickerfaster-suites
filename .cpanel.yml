@@ -15,10 +15,10 @@ deployment:
     - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
     - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # Clean destination folder but preserve .env and .cpanel.yml
+    # Clean destination folder but preserve .env, .cpanel.yml, storage, bootstrap/cache
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
     - /bin/sh -c 'for f in $(/bin/ls -A "$DEPLOYPATH"); do
-        [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || /bin/rm -rf "$DEPLOYPATH/$f";
+        [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || [ "$f" = "storage" ] || [ "$f" = "bootstrap" ] || /bin/rm -rf "$DEPLOYPATH/$f";
       done' >> $LOGFILE 2>&1
 
     # Copy repository files to deployment path
@@ -75,4 +75,4 @@ deployment:
     - /bin/echo "===== Deployment finished at $(date) =====" >> $LOGFILE
 
     # Rotate logs - keep only last 5
-    - /bin/ls -1t $LOGDIR/deploy_*.log | /usr/bin/tail -n +6 | /usr/bin/xargs -r /bin/rm --
+    - /bin/ls -1t $LOGDIR/deploy_*.log | /usr/bin/tail -n +6 | /bin/xargs -r /bin/rm --
