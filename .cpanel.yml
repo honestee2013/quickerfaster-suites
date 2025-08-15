@@ -14,7 +14,7 @@ deployment:
     - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
     - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # Simulate rsync --delete
+    # Simulate rsync --delete (preserve exclusions)
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
     - /bin/sh -c 'for f in $(/bin/ls -A "$DEPLOYPATH"); do
         [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || /bin/rm -rf "$DEPLOYPATH/$f";
@@ -24,9 +24,16 @@ deployment:
     - /bin/echo "Copying files with cp..." >> $LOGFILE
     - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^(\.git|\.env|\.cpanel\.yml)$") "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
-    # Install PHP dependencies
+    # Install Composer locally if missing
+    - /bin/echo "Checking Composer..." >> $LOGFILE
+    - if [ ! -f $DEPLOYPATH/composer.phar ]; then \
+        /bin/echo "Downloading Composer..." >> $LOGFILE && \
+        cd $DEPLOYPATH && /usr/bin/curl -sS https://getcomposer.org/installer | /opt/cpanel/php/bin/php >> $LOGFILE 2>&1; \
+      fi
+
+    # Install PHP dependencies using local composer.phar
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - composer install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH >> $LOGFILE 2>&1
+    - cd $DEPLOYPATH && /opt/cpanel/php/bin/php composer.phar install --no-dev --optimize-autoloader >> $LOGFILE 2>&1
 
     # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
