@@ -1,3 +1,17 @@
+# Ignore everything in storage
 *
-!public/
+# But allow these folders to exist in the repo
+!framework/
+!app/public/
+!logs/
+# Keep .gitignore files tracked
 !.gitignore
+
+# Inside framework/, ignore runtime cache except folder structure
+framework/*
+!framework/.gitignore
+!framework/cache/
+!framework/sessions/
+!framework/views/
+!framework/cache/data/
+!framework/cache/data/.gitignore
