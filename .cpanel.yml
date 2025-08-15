@@ -17,11 +17,12 @@ deployment:
 
     # Simulate rsync --delete (remove old files except excluded ones)
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
-    - find $DEPLOYPATH -mindepth 1 \
-        ! -name ".env" \
-        ! -name ".cpanel.yml" \
-        ! -path "$DEPLOYPATH/.git*" \
-        -exec rm -rf {} + >> $LOGFILE 2>&1
+    - /bin/bash -c "find \"$DEPLOYPATH\" -mindepth 1 \
+        -not -name '.env' \
+        -not -name '.cpanel.yml' \
+        -not -path \"$DEPLOYPATH/.git*\" \
+        -exec rm -rf {} + " >> $LOGFILE 2>&1
+
 
     # Copy files using tar with exclusions
     - /bin/echo "Copying files using tar..." >> $LOGFILE
