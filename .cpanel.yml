@@ -51,11 +51,11 @@ deployment:
     - /bin/sh -c 'cd "$DEPLOYPATH" && php "$COMPOSER_BIN" install --no-dev --no-scripts --optimize-autoloader >> "$LOGFILE" 2>&1'
 
     # Run Artisan package discovery & cache commands manually
-    # - /bin/echo "Running Artisan post-deploy tasks..." >> $LOGFILE
-    # - /bin/sh -c 'php "$DEPLOYPATH/artisan" package:discover >> "$LOGFILE" 2>&1'
-    # - /bin/sh -c 'php "$DEPLOYPATH/artisan" config:cache >> "$LOGFILE" 2>&1'
-    # - /bin/sh -c 'php "$DEPLOYPATH/artisan" route:cache >> "$LOGFILE" 2>&1'
-    # - /bin/sh -c 'php "$DEPLOYPATH/artisan" view:cache >> "$LOGFILE" 2>&1'
+    - /bin/echo "Running Artisan post-deploy tasks..." >> $LOGFILE
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" package:discover >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" config:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" route:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" view:cache >> "$LOGFILE" 2>&1'
 
     # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
