@@ -17,7 +17,7 @@ deployment:
 
     # Sync files from repo to live site
     - /bin/echo "Syncing files to live folder..." >> $LOGFILE
-    - /bin/rsync -av --delete \
+    - rsync -av --delete \
         --exclude=".git" \
         --exclude=".cpanel.yml" \
         --exclude=".env" \
