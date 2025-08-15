@@ -30,7 +30,7 @@ deployment:
         /bin/echo "Downloading Composer..." >> "$LOGFILE" &&
         cd "$DEPLOYPATH" &&
         /usr/bin/curl -sS https://getcomposer.org/installer -o composer-setup.php &&
-        /opt/cpanel/php/bin/php composer-setup.php --quiet &&
+        php composer-setup.php --quiet &&
         rm composer-setup.php &&
         /bin/echo "Composer installed successfully" >> "$LOGFILE";
       fi'
