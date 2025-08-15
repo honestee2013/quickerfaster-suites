@@ -25,6 +25,15 @@ deployment:
     - /bin/echo "Copying files to deployment path..." >> $LOGFILE
     - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^(\.git|\.env|\.cpanel\.yml)$") "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
+    # Ensure Laravel storage and cache directories exist
+    - /bin/echo "Ensuring Laravel storage and cache folders exist..." >> $LOGFILE
+    - /bin/sh -c 'mkdir -p $DEPLOYPATH/storage/framework/cache/data \
+                   $DEPLOYPATH/storage/framework/sessions \
+                   $DEPLOYPATH/storage/framework/views \
+                   $DEPLOYPATH/bootstrap/cache \
+                   $DEPLOYPATH/storage/logs && \
+                   chmod -R 775 $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache' >> $LOGFILE 2>&1
+
     # Install Composer locally if missing
     - /bin/echo "Checking Composer..." >> $LOGFILE
     - /bin/sh -c 'if [ ! -f "$COMPOSER_BIN" ]; then
