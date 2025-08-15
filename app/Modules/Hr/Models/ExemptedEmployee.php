@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class ExemptedEmployee extends Model
@@ -12,7 +11,6 @@ class ExemptedEmployee extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'exempted_employees';
 
@@ -26,4 +24,12 @@ class ExemptedEmployee extends Model
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\ExemptedEmployeeFactory::new();
+    }
 }

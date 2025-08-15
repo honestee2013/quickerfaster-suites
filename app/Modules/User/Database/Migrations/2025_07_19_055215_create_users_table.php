@@ -17,6 +17,7 @@ return new class extends Migration
 			$table->string('remember_token')->nullable();
 			$table->string('user_type');
 			
+            
             $table->timestamps();
         });
     }

@@ -24,81 +24,15 @@ use App\Modules\Hr\Http\Controllers\PayrollRunController;
 */
 
 
-use App\Modules\Hr\Http\Controllers\IdCardController;
-
-
-/*
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/show-employee-id-card', [IdCardController::class, 'showEmployeeIdCard'])->name('show.employee.id.card');
-});
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/download-employee-id-card', [IdCardController::class, 'downloadEmployeeIdCard'])->name('download.employee.id.card');
-});
-
-
-
-
-
-
-
-// Example route for the authenticated user to view their own ID card
-Route::middleware(['auth'])->group(function () {
-    Route::get('/my-id-card', [IdCardController::class, 'showMyIdCard'])->name('my.id.card');
-});
-
-// Example routes for downloading ID cards
-Route::middleware(['auth'])->group(function () {
-    Route::get('/download-id-card', [IdCardController::class, 'downloadMyIdCard'])->name('download.id.card');
-});*/
-
-
-
-
-
-
-
-
-
-/*
-// Example route for HR managers to view a specific employee's ID card
-// This route should be protected by appropriate authorization (e.g., 'role:hr_manager')
-Route::middleware(['auth', 'can:view-employee-id-cards'])->group(function () {
-    Route::get('/employee/{userId}/id-card', [IdCardController::class, 'showEmployeeIdCard'])->name('employee.id.card');
-});
-
-
-// For HR manager to download other employee's ID cards
-Route::middleware(['auth', 'can:download-employee-id-cards'])->group(function () {
-    Route::get('/employee/{userId}/id-card/download', [IdCardController::class, 'downloadEmployeeIdCard'])->name('employee.id.card.download');
-});
-
-
-
-*/
-
-
-
-
-
-
-
-
-
-
-// routes/web.php
-Route::get('/payroll-runs/{payrollRun}/generate', [PayrollRunController::class, 'generatePayroll'])
-    ->name('payroll-runs.generate');
 
 
 Route::group(['middleware' => 'auth'], function () {
 
     Route::get('/', function() {
-        return redirect("hr/employee-profiles");
+        return redirect("core/modules");
     });
 	Route::get('dashboard', function () {
-		return redirect("hr/employee-profiles");
+		return redirect("core/modules");
 	})->name('dashboard');
 
     //Route::get('/', [HomeController::class, 'home']);

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class BreakRule extends Model
@@ -12,7 +11,6 @@ class BreakRule extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'break_rules';
 
@@ -22,8 +20,16 @@ class BreakRule extends Model
     ];
 
        public function complianceStandard(){
-		return $this->belongsTo('App\Modules\HR\Models\ComplianceStandard', 'compliance_standard_id');
+		return $this->belongsTo('App\Modules\Hr\Models\ComplianceStandard', 'compliance_standard_id');
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\BreakRuleFactory::new();
+    }
 }

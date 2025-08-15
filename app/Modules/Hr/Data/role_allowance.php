@@ -5,7 +5,7 @@ return [
   'fieldDefinitions' =>  [
     'payroll_run_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\PayrollRun',
+        'model' => 'App\\Modules\\Hr\\Models\\PayrollRun',
         'type' => 'belongsTo',
         'display_field' => 'payroll_number',
         'dynamic_property' => 'payrollRun',
@@ -14,7 +14,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\PayrollRun',
+        'model' => 'App\\Modules\\Hr\\Models\\PayrollRun',
         'column' => 'payroll_number',
         'hintField' => NULL,
       ], 
@@ -49,7 +49,7 @@ return [
 
     'allowance_type_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\AllowanceType',
+        'model' => 'App\\Modules\\Hr\\Models\\AllowanceType',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'allowanceType',
@@ -58,7 +58,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\AllowanceType',
+        'model' => 'App\\Modules\\Hr\\Models\\AllowanceType',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -140,6 +140,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

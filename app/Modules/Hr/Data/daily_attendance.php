@@ -76,35 +76,19 @@ return [
       'label' => 'Longitude',
     ], 
 
-    'sync_status' =>    [
-      'display' => 'inline',
-      'field_type' => 'select',
-      'options' =>      [
-        'Pending' => 'Pending',
-        ' Success' => ' Success',
-        ' Failed' => ' Failed',
-      ], 
-
-      'label' => 'Sync Status',
-    ], 
-
-    'sync_attempts' =>    [
-      'display' => 'inline',
-      'field_type' => 'integer',
-      'validation' => 'required|integer|min:0',
-      'label' => 'Sync Attempts',
-    ], 
-
   ], 
 
   'hiddenFields' =>  [
     'onTable' =>    [
+      0 => 'employee_profile_id',
     ], 
 
     'onNewForm' =>    [
+      0 => 'employee_profile_id',
     ], 
 
     'onEditForm' =>    [
+      0 => 'employee_profile_id',
     ], 
 
     'onQuery' =>    [
@@ -154,6 +138,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

@@ -5,7 +5,7 @@ return [
   'fieldDefinitions' =>  [
     'payroll_run_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\PayrollRun',
+        'model' => 'App\\Modules\\Hr\\Models\\PayrollRun',
         'type' => 'belongsTo',
         'display_field' => 'payroll_number',
         'dynamic_property' => 'payrollRun',
@@ -14,7 +14,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\PayrollRun',
+        'model' => 'App\\Modules\\Hr\\Models\\PayrollRun',
         'column' => 'payroll_number',
         'hintField' => NULL,
       ], 
@@ -49,7 +49,7 @@ return [
 
     'tax_type_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\TaxType',
+        'model' => 'App\\Modules\\Hr\\Models\\TaxType',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'taxType',
@@ -58,7 +58,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\TaxType',
+        'model' => 'App\\Modules\\Hr\\Models\\TaxType',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -142,6 +142,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

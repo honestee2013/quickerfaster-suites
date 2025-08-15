@@ -58,7 +58,7 @@ return [
 
     'compliance_standard_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\ComplianceStandard',
+        'model' => 'App\\Modules\\Hr\\Models\\ComplianceStandard',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'complianceStandard',
@@ -67,7 +67,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\ComplianceStandard',
+        'model' => 'App\\Modules\\Hr\\Models\\ComplianceStandard',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -163,6 +163,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

@@ -342,4 +342,23 @@ return array (
     'icon' => 'fas fa-users-cog',
     'url' => 'hr/departments',
   ),
+  18 => 
+  array (
+    'title' => 'Attendance & Earnings',
+    'icon' => 'fas fa-clipboard-check',
+    'url' => 'hr/attendance-sessions',
+    'submenu' => 
+    array (
+      0 => 
+      array (
+        'title' => 'Daily Attendance',
+        'url' => 'hr/daily-attendance',
+      ),
+      1 => 
+      array (
+        'title' => 'Daily Earnings',
+        'url' => 'hr/daily-earnings',
+      ),
+    ),
+  ),
 );

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class EmployeeProfile extends Model
@@ -12,7 +11,6 @@ class EmployeeProfile extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'employee_profiles';
 
@@ -37,9 +35,21 @@ class EmployeeProfile extends Model
 		return $this->belongsTo('App\Modules\Hr\Models\EmployeeProfile', 'employee_profile_id');
 	}
 
+   public function roleSchedules(){
+		return $this->hasMany('App\Modules\Hr\Models\RoleSchedule');
+	}
+
    public function shift(){
 		return $this->belongsTo('App\Modules\Hr\Models\Shift', 'shift_id');
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\EmployeeProfileFactory::new();
+    }
 }

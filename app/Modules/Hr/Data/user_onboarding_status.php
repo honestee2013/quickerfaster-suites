@@ -27,7 +27,7 @@ return [
 
     'onboarding_task_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\OnboardingTask',
+        'model' => 'App\\Modules\\Hr\\Models\\OnboardingTask',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'onboardingTask',
@@ -36,7 +36,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\OnboardingTask',
+        'model' => 'App\\Modules\\Hr\\Models\\OnboardingTask',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -122,6 +122,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

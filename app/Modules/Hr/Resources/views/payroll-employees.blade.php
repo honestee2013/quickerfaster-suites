@@ -19,15 +19,19 @@
     :hiddenFields="[
   'onTable' => 
   [
+    0 => 'payroll_run_id',
   ],
   'onNewForm' => 
   [
+    0 => 'payroll_run_id',
   ],
   'onEditForm' => 
   [
+    0 => 'payroll_run_id',
   ],
   'onQuery' => 
   [
+    0 => 'payroll_run_id',
   ],
 ]"
     :queryFilters="[

@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class UserOnboardingStatus extends Model
@@ -12,7 +11,6 @@ class UserOnboardingStatus extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'user_onboarding_statuses';
 
@@ -26,8 +24,16 @@ class UserOnboardingStatus extends Model
 	}
 
    public function onboardingTask(){
-		return $this->belongsTo('App\Modules\HR\Models\OnboardingTask', 'onboarding_task_id');
+		return $this->belongsTo('App\Modules\Hr\Models\OnboardingTask', 'onboarding_task_id');
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\UserOnboardingStatusFactory::new();
+    }
 }

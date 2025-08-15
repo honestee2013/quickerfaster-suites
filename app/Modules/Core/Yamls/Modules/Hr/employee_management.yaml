@@ -40,6 +40,7 @@ models:
         validation:
           - required|int
 
+
       employee_profile_id:
         type: select
         label: Reporting Manager ID
@@ -49,6 +50,7 @@ models:
           onDelete: set null
         modifiers:
           nullable: true
+          
 
 
       job_title_id:
@@ -186,6 +188,12 @@ models:
         model: App\Modules\Hr\Models\EmployeeProfile # Adjust namespace if needed
         foreignKey: employee_profile_id
         displayField: employee_id # Or appropriate display field
+
+      roleSchedules:
+        type: hasMany
+        model: App\Modules\Hr\Models\RoleSchedule
+        foreignKey: employee_profile_id
+        displayField: name # Or appropriate display field
 
 
       shift:

@@ -9,7 +9,7 @@ use App\Modules\Hr\Services\PayrollCalculatorService;
 use App\Modules\Hr\Models\DailyAttendance;
 use App\Modules\Hr\Models\EmployeeProfile;
 use App\Modules\Hr\Models\Shift;
-use App\Modules\Hr\Models\Role;
+use App\Modules\Access\Models\Role;
 use App\Modules\Hr\Models\DayOfWeek;
 use App\Modules\Hr\Models\BreakRule;
 use App\Modules\Hr\Models\RoleSchedule;

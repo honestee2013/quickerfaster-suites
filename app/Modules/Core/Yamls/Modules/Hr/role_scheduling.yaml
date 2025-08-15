@@ -16,6 +16,9 @@ models:
           onDelete: cascade
         validation:
           - required
+        modifiers:
+          nullable: true
+
       shift_id:
         type: select
         foreign:
@@ -24,6 +27,9 @@ models:
           onDelete: cascade
         validation:
           - required
+        modifiers:
+          nullable: true
+
       day_of_week_id:
         type: select
         foreign:
@@ -32,15 +38,19 @@ models:
           onDelete: cascade
         validation:
           - required
-      
-      override_time_start:
+        modifiers:
+          nullable: true
+
+      override_start_time:
         type: timepicker
         modifiers:
           nullable: true
-      override_time_end:
+
+      override_end_time:
         type: timepicker
         modifiers:
           nullable: true
+
       overtime_after_hours:
         type: decimal
         modifiers:
@@ -58,7 +68,24 @@ models:
         validation:
           - nullable|numeric|min:0
 
+      overtime_rate_multiplier:
+        type: decimal
+        default: 1.5
+        modifiers:
+          precision: 4,2
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
 
+
+      override_hourly_rate:
+        type: decimal
+        modifiers:
+          precision: 4,2
+          nullable: true
+        validation:
+          - nullable|numeric|min:0
+          
 
       max_daily_hours:
         type: decimal
@@ -78,21 +105,40 @@ models:
         modifiers:
           nullable: true
 
+      employee_profile_id:
+        type: select
+        foreign:
+          table: employee_profiles # Assuming 'break_rules' table exists
+          column: id
+          onDelete: set null # Or 'restrict' if a break rule must exist
+        modifiers:
+          nullable: true
+
+
       late_grace_minutes:
         type: integer
         default: 5
         validation:
           - required|integer|min:0
+        modifiers:
+          nullable: true
+
       early_leave_grace_minutes:
         type: integer
         default: 5
         validation:
           - required|integer|min:0
+        modifiers:
+          nullable: true
+
       effective_date:
         type: datepicker
         default: 'now()->toDateString()' # Represents Laravel's now()
         validation:
           - required|date
+        modifiers:
+          nullable: true
+          
       end_date:
         type: datepicker
         modifiers:
@@ -143,8 +189,8 @@ models:
       - title: Overrides and Overtime
         groupType: hr
         fields:
-          - override_time_start
-          - override_time_end
+          - override_start_time
+          - override_end_time
           - overtime_after_hours
           - break_rule_id
 
@@ -162,17 +208,17 @@ models:
         displayField: name # Or appropriate display field
       shift:
         type: belongsTo
-        model: App\Modules\HR\Models\Shift # Adjust namespace if needed
+        model: App\Modules\Hr\Models\Shift # Adjust namespace if needed
         foreignKey: shift_id
         displayField: name # Or appropriate display field
       dayOfWeek:
         type: belongsTo
-        model: App\Modules\HR\Models\DayOfWeek # Assuming you create this model
+        model: App\Modules\Hr\Models\DayOfWeek # Assuming you create this model
         foreignKey: day_of_week_id
         displayField: name # Or appropriate display field like 'day_name'
       breakRule:
         type: belongsTo
-        model: App\Modules\HR\Models\BreakRule # Assuming this model exists
+        model: App\Modules\Hr\Models\BreakRule # Assuming this model exists
         foreignKey: break_rule_id
         displayField: name # Or appropriate display field
 
@@ -188,7 +234,7 @@ models:
           iconClasses: fas fa-business-time # Or a more suitable icon
         - title: User Schedules
           url: user-schedules
-        
+
 
 
 
@@ -198,6 +244,20 @@ models:
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
+
+
+    # indexes:
+    #   - role_id
+    #   - shift_id
+
+    # uniqueIndexes:
+    #   - email
+    #   - phone
+
+    # compoundIndexes:
+    #   - [employee_id, attendance_date]
+    #   - [shift_id, role_id]
+
 
 
 
@@ -216,10 +276,12 @@ UserSchedule:
           onDelete: cascade
         validation:
           - required
+
       start_time:
         type: timepicker
         modifiers:
           nullable: true
+          
       end_time:
         type: timepicker
         modifiers:
@@ -258,7 +320,7 @@ UserSchedule:
 
     sidebar:
       add: false
-      title: Manage User Schedules 
+      title: Manage User Schedules
       iconClasses: fas fa-user-clock # Or a more suitable icon
       submenu:
         - title: User Schedules
@@ -335,7 +397,7 @@ UserSchedule:
   #      displayField: name # Or appropriate display field
   #    workDay:
   #      type: belongsTo
-  #      model: App\Modules\HR\Models\WorkDay
+  #      model: App\Modules\Hr\Models\WorkDay
   #      foreignKey: work_day_id
   #      displayField: day_name
 #

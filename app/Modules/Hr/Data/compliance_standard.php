@@ -6,7 +6,7 @@ return [
     'breakRules' =>    [
       'field_type' => 'checkbox',
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\BreakRule',
+        'model' => 'App\\Modules\\Hr\\Models\\BreakRule',
         'type' => 'hasMany',
         'display_field' => 'name',
         'hintField' => NULL,
@@ -17,7 +17,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\BreakRule',
+        'model' => 'App\\Modules\\Hr\\Models\\BreakRule',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -87,6 +87,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

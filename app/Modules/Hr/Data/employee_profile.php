@@ -3,6 +3,29 @@
 return [
   'model' => 'App\\Modules\\Hr\\Models\\EmployeeProfile',
   'fieldDefinitions' =>  [
+    'roleSchedules' =>    [
+      'field_type' => 'checkbox',
+      'relationship' =>      [
+        'model' => 'App\\Modules\\Hr\\Models\\RoleSchedule',
+        'type' => 'hasMany',
+        'display_field' => 'name',
+        'hintField' => NULL,
+        'dynamic_property' => 'roleSchedules',
+        'foreign_key' => 'employee_profile_id',
+        'local_key' => 'id',
+        'inlineAdd' => false,
+      ], 
+
+      'options' =>      [
+        'model' => 'App\\Modules\\Hr\\Models\\RoleSchedule',
+        'column' => 'name',
+        'hintField' => NULL,
+      ], 
+
+      'label' => 'Role Schedules',
+      'multiSelect' => true,
+    ], 
+
     'employee_id' =>    [
       'display' => 'inline',
       'field_type' => 'string',
@@ -250,6 +273,9 @@ return [
       'route' => 'download.employee.id.card',
     ], 
 
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

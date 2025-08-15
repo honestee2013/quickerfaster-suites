@@ -91,9 +91,9 @@ class PayrollGenerator
                     'payroll_number' => $payrollRun->payroll_number,
                     'employee_id' => $employeeProfile->employee_id,
                     'base_salary' => $totalEarnings,
-                    'gross_salary' => $totalEarnings,
+                    'gross_pay' => $totalEarnings,
                     'total_deductions' => 0,
-                    'net_salary' => $totalEarnings,
+                    'net_pay' => $totalEarnings,
                     'total_allowances' => 0,
                     'total_bonuses' => 0,
                     'total_taxes' => 0,
@@ -115,12 +115,12 @@ class PayrollGenerator
                     $allowanceTotal = $this->calculateComponentAmount(
                         $allAllowances,
                         $totalEarnings,
-                        $payrollData['gross_salary'],
+                        $payrollData['gross_pay'],
                         'addition_type'
                     );
 
                     $payrollData['total_allowances'] = $allowanceTotal;
-                    $payrollData['gross_salary'] += $allowanceTotal;
+                    $payrollData['gross_pay'] += $allowanceTotal;
                 }
 
                 // Process bonuses if enabled
@@ -136,12 +136,12 @@ class PayrollGenerator
                     $bonusTotal = $this->calculateComponentAmount(
                         $allBonuses,
                         $totalEarnings,
-                        $payrollData['gross_salary'],
+                        $payrollData['gross_pay'],
                         'addition_type'
                     );
 
                     $payrollData['total_bonuses'] = $bonusTotal;
-                    $payrollData['gross_salary'] += $bonusTotal;
+                    $payrollData['gross_pay'] += $bonusTotal;
                 }
 
                 // Process taxes if enabled
@@ -156,7 +156,7 @@ class PayrollGenerator
                     $taxTotal = $this->calculateComponentAmount(
                         $allTaxes,
                         $totalEarnings,
-                        $payrollData['gross_salary'],
+                        $payrollData['gross_pay'],
                         'subtraction_type'
                     );
 
@@ -176,7 +176,7 @@ class PayrollGenerator
                     $deductionTotal = $this->calculateComponentAmount(
                         $allDeductions,
                         $totalEarnings,
-                        $payrollData['gross_salary'],
+                        $payrollData['gross_pay'],
                         'subtraction_type'
                     );
 
@@ -185,12 +185,13 @@ class PayrollGenerator
                 }
 
                 // Final net salary calculation
-                $payrollData['net_salary'] = $payrollData['gross_salary'] - $payrollData['total_deductions'];
+                $payrollData['net_pay'] = $payrollData['gross_pay'] - $payrollData['total_deductions'];
 
                 PayrollEmployee::updateOrCreate(
                     [
                         'payroll_number' => $payrollRun->payroll_number,
-                        'employee_id' => $employeeProfile->employee_id
+                        'employee_id' => $employeeProfile->employee_id,
+                        'payroll_run_id' => $payrollRun->id,
                     ],
                     $payrollData
                 );
@@ -341,7 +342,7 @@ class PayrollGenerator
     protected function getEarningsForPeriod($startDate, $endDate): array
     {
         return DailyEarning::whereBetween('work_date', [$startDate, $endDate])
-            ->select('employee_id', DB::raw('SUM(amount_earned) as total'))
+            ->select('employee_id', DB::raw('SUM(total_amount) as total'))
             ->groupBy('employee_id')
             ->pluck('total', 'employee_id')
             ->all();

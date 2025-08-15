@@ -34,7 +34,7 @@ return [
 
     'shift_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\Shift',
+        'model' => 'App\\Modules\\Hr\\Models\\Shift',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'shift',
@@ -43,7 +43,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\Shift',
+        'model' => 'App\\Modules\\Hr\\Models\\Shift',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -56,7 +56,7 @@ return [
 
     'day_of_week_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\DayOfWeek',
+        'model' => 'App\\Modules\\Hr\\Models\\DayOfWeek',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'dayOfWeek',
@@ -65,7 +65,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\DayOfWeek',
+        'model' => 'App\\Modules\\Hr\\Models\\DayOfWeek',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -76,16 +76,16 @@ return [
       'label' => 'Day Of Week',
     ], 
 
-    'override_time_start' =>    [
+    'override_start_time' =>    [
       'display' => 'inline',
       'field_type' => 'timepicker',
-      'label' => 'Override Time Start',
+      'label' => 'Override Start Time',
     ], 
 
-    'override_time_end' =>    [
+    'override_end_time' =>    [
       'display' => 'inline',
       'field_type' => 'timepicker',
-      'label' => 'Override Time End',
+      'label' => 'Override End Time',
     ], 
 
     'overtime_after_hours' =>    [
@@ -102,6 +102,20 @@ return [
       'label' => 'Max Paid Overtime Hours',
     ], 
 
+    'overtime_rate_multiplier' =>    [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'validation' => 'nullable|numeric|min:0',
+      'label' => 'Overtime Rate Multiplier',
+    ], 
+
+    'override_hourly_rate' =>    [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'validation' => 'nullable|numeric|min:0',
+      'label' => 'Override Hourly Rate',
+    ], 
+
     'max_daily_hours' =>    [
       'display' => 'inline',
       'field_type' => 'number',
@@ -111,7 +125,7 @@ return [
 
     'break_rule_id' =>    [
       'relationship' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\BreakRule',
+        'model' => 'App\\Modules\\Hr\\Models\\BreakRule',
         'type' => 'belongsTo',
         'display_field' => 'name',
         'dynamic_property' => 'breakRule',
@@ -120,7 +134,7 @@ return [
       ], 
 
       'options' =>      [
-        'model' => 'App\\Modules\\HR\\Models\\BreakRule',
+        'model' => 'App\\Modules\\Hr\\Models\\BreakRule',
         'column' => 'name',
         'hintField' => NULL,
       ], 
@@ -128,6 +142,12 @@ return [
       'display' => 'inline',
       'field_type' => 'select',
       'label' => 'Break Rule',
+    ], 
+
+    'employee_profile_id' =>    [
+      'display' => 'inline',
+      'field_type' => 'select',
+      'label' => 'Employee Profile',
     ], 
 
     'late_grace_minutes' =>    [
@@ -225,8 +245,8 @@ return [
       'title' => 'Overrides and Overtime',
       'groupType' => 'hr',
       'fields' =>      [
-        0 => 'override_time_start',
-        1 => 'override_time_end',
+        0 => 'override_start_time',
+        1 => 'override_end_time',
         2 => 'overtime_after_hours',
         3 => 'break_rule_id',
       ], 
@@ -246,6 +266,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

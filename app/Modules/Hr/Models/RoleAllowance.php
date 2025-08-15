@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class RoleAllowance extends Model
@@ -12,7 +11,6 @@ class RoleAllowance extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'role_allowances';
 
@@ -22,7 +20,7 @@ class RoleAllowance extends Model
     ];
 
        public function payrollRun(){
-		return $this->belongsTo('App\Modules\HR\Models\PayrollRun', 'payroll_run_id');
+		return $this->belongsTo('App\Modules\Hr\Models\PayrollRun', 'payroll_run_id');
 	}
 
    public function role(){
@@ -30,8 +28,16 @@ class RoleAllowance extends Model
 	}
 
    public function allowanceType(){
-		return $this->belongsTo('App\Modules\HR\Models\AllowanceType', 'allowance_type_id');
+		return $this->belongsTo('App\Modules\Hr\Models\AllowanceType', 'allowance_type_id');
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\RoleAllowanceFactory::new();
+    }
 }

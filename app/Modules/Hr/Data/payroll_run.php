@@ -3,6 +3,29 @@
 return [
   'model' => 'App\\Modules\\Hr\\Models\\PayrollRun',
   'fieldDefinitions' =>  [
+    'payrollEmployees' =>    [
+      'field_type' => 'checkbox',
+      'relationship' =>      [
+        'model' => 'App\\Modules\\Hr\\Models\\PayrollEmployee',
+        'type' => 'hasMany',
+        'display_field' => 'employee_id',
+        'hintField' => NULL,
+        'dynamic_property' => 'payrollEmployees',
+        'foreign_key' => 'payroll_run_id',
+        'local_key' => 'id',
+        'inlineAdd' => false,
+      ], 
+
+      'options' =>      [
+        'model' => 'App\\Modules\\Hr\\Models\\PayrollEmployee',
+        'column' => 'employee_id',
+        'hintField' => NULL,
+      ], 
+
+      'label' => 'Payroll Employees',
+      'multiSelect' => true,
+    ], 
+
     'payroll_number' =>    [
       'display' => 'inline',
       'field_type' => 'string',
@@ -199,8 +222,8 @@ return [
     2 => 'delete',
   ], 
 
-  'isTransaction' => false,
-  'dispatchEvents' => false,
+  'isTransaction' => true,
+  'dispatchEvents' => true,
   'controls' => 'all',
   'fieldGroups' =>  [
     0 =>    [
@@ -284,6 +307,93 @@ return [
   ], 
 
   'moreActions' =>  [
+    0 =>    [
+      'title' => 'Generate Payroll',
+      'icon' => 'fas fa-cogs',
+      'updateModelField' => true,
+      'fieldName' => 'status',
+      'fieldValue' => 'generated',
+      'actionName' => 'generate_payroll',
+      'handleByEventHandlerOnly' => true,
+    ], 
+
+    1 =>    [
+      'title' => 'Approve Payroll',
+      'icon' => 'fas fa-check-circle',
+      'updateModelField' => true,
+      'fieldName' => 'status',
+      'fieldValue' => 'approved',
+      'actionName' => 'approve_payroll',
+      'handleByEventHandlerOnly' => true,
+    ], 
+
+    2 =>    [
+      'title' => 'Process Payment',
+      'icon' => 'fas fa-money-check-alt',
+      'updateModelField' => true,
+      'fieldName' => 'status',
+      'fieldValue' => 'processed',
+      'actionName' => 'process_payment',
+      'handleByEventHandlerOnly' => true,
+    ], 
+
+    3 =>    [
+      'title' => 'Cancel Payroll',
+      'icon' => 'fas fa-ban',
+      'updateModelField' => true,
+      'fieldName' => 'status',
+      'fieldValue' => 'cancelled',
+      'actionName' => 'cancel_payroll',
+      'handleByEventHandlerOnly' => true,
+    ], 
+
+    4 =>    [
+      'title' => 'View Report',
+      'icon' => 'fas fa-file-alt',
+      'route' => 'reports.show',
+      'params' =>      [
+        'modelName' => 'PayrollRun',
+        'moduleName' => 'Hr',
+      ], 
+
+    ], 
+
+  ], 
+
+  'report' =>  [
+    'model' => 'App\\Modules\\hr\\Models\\PayrollRun',
+    'itemsModel' => 'App\\Modules\\hr\\Models\\PayrollEmployee',
+    'recordModel' => 'App\\Modules\\hr\\Models\\PayrollRun',
+    'headerFields' =>    [
+      0 => 'title',
+      1 => 'payroll_number',
+      2 => 'from_date',
+      3 => 'to_date',
+      4 => 'status',
+    ], 
+
+    'summaryFields' =>    [
+      'base_salary' => 'Total Base Salary',
+      'total_allowances' => 'Total Allowances',
+      'total_bonuses' => 'Total Bonuses',
+      'total_deductions' => 'Total Deductions',
+      'net_pay' => 'Total Net Salary',
+    ], 
+
+    'signatories' =>    [
+      0 =>      [
+        'label' => 'Prepared By',
+        'field' => 'created_by',
+      ], 
+
+      1 =>      [
+        'label' => 'Approved By',
+        'field' => 'approved_by',
+      ], 
+
+    ], 
+
+    'foreignKey' => 'payroll_run_id',
   ], 
 
 ];

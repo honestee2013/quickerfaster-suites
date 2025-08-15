@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Modules\user\Models; // Important: Include the module namespace
+namespace App\Modules\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
-
+use QuickerFaster\CodeGen\Traits\GUI\HasDisplayName;
+use App\Modules\Core\Traits\HasEditableTraits;
 
 class UserStatus extends Model
 {
     use HasFactory;
+    use HasDisplayName, HasEditableTraits;
     
-    
-
 
     protected $table = 'user_statuses';
 
@@ -26,4 +25,12 @@ class UserStatus extends Model
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\User\Database\Factories\UserStatusFactory::new();
+    }
 }

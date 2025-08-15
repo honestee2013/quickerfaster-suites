@@ -64,4 +64,7 @@ return [
   'moreActions' =>  [
   ], 
 
+  'report' =>  [
+  ], 
+
 ];

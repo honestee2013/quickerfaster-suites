@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\user\Models; // Important: Include the module namespace
+namespace App\Modules\User\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class UserStatusCategory extends Model
@@ -12,7 +11,6 @@ class UserStatusCategory extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'user_status_categories';
 
@@ -26,4 +24,12 @@ class UserStatusCategory extends Model
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\User\Database\Factories\UserStatusCategoryFactory::new();
+    }
 }

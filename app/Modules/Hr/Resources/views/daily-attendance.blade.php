@@ -13,18 +13,21 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\DailyAttendance"
+    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\AttendanceSession"
     pageTitle="Daily Attendance Overview"
     queryFilters=[]
     :hiddenFields="[
   'onTable' => 
   [
+    0 => 'employee_profile_id',
   ],
   'onNewForm' => 
   [
+    0 => 'employee_profile_id',
   ],
   'onEditForm' => 
   [
+    0 => 'employee_profile_id',
   ],
   'onQuery' => 
   [

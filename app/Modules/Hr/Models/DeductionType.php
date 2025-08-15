@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class DeductionType extends Model
@@ -12,7 +11,6 @@ class DeductionType extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'deduction_types';
 
@@ -22,4 +20,12 @@ class DeductionType extends Model
     ];
 
      // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\DeductionTypeFactory::new();
+    }
 }

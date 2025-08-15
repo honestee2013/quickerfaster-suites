@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class UserSalary extends Model
@@ -12,7 +11,6 @@ class UserSalary extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'user_salaries';
 
@@ -26,4 +24,12 @@ class UserSalary extends Model
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\UserSalaryFactory::new();
+    }
 }

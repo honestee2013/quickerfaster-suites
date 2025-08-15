@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class CheckInOnlyRole extends Model
@@ -12,7 +11,6 @@ class CheckInOnlyRole extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'check_in_only_roles';
 
@@ -26,4 +24,12 @@ class CheckInOnlyRole extends Model
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\CheckInOnlyRoleFactory::new();
+    }
 }

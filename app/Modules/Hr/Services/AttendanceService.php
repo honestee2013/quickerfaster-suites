@@ -6,6 +6,7 @@ namespace App\Modules\Hr\Services;
 use App\Modules\Hr\Models\DailyAttendance;
 use App\Modules\Hr\Models\EmployeeProfile;
 use App\Modules\Hr\Models\Shift; // Assuming you have a Shift model
+use App\Modules\Hr\Models\AttendanceSession; 
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use InvalidArgumentException;
@@ -20,65 +21,72 @@ use Illuminate\Support\Facades\Log; // For logging warnings/errors
 
 class AttendanceService
 {
-    protected PayrollCalculatorService $payrollCalculator;
+    /*protected PayrollCalculatorService $payrollCalculator;
 
     public function __construct(PayrollCalculatorService $payrollCalculatorService)
     {
         $this->payrollCalculator = $payrollCalculatorService;
-    }
+    }*/
 
-    public function record(array $data): DailyAttendance
-    {
+public function record(array $data): AttendanceSession
+{
+    return DB::transaction(function () use ($data) {
 
+        $employeeId = $data['employee_id'];
+        
 
+        $employeeProfile = EmployeeProfile::where('employee_id', $employeeId)
+            ->with(['shift', 'user.roles'])
+            ->first();
 
-        return DB::transaction(function () use ($data) {
-
-            $employeeId = $data['employee_id'];
-            $attendanceTime = Carbon::parse($data['attendance_time']);
-            $type = $data['attendance_type'];
-            $attendanceDate = $attendanceTime->toDateString();
-
-            $employeeProfile = EmployeeProfile::where('employee_id', $employeeId)
-                                            ->with(['shift', 'user.roles']) // Eager load shift and role
-                                            ->first();
-
-            if (!$employeeProfile) {
-                throw new InvalidArgumentException("Employee with ID {$employeeId} not found.");
-            }
+        if (!$employeeProfile) {
+            throw new InvalidArgumentException("Employee with ID {$employeeId} not found.");
+        }
 
 
-            // Create the attendance record
-            $attendance = DailyAttendance::create([
+        if (!isset($data["check_in_time"]) && !isset($data["check_out_time"])) {
+            throw new InvalidArgumentException("Invalid attendance type. neither check_in_time nor check_out_time was provided");
+        }
+
+        $sessionDate = $data["attendance_date"]?? today()->format('Y-m-d');
+
+        $session = null;
+        if (isset($data["check_in_time"])) {
+            // 1. Create new session (open session)
+            $session = AttendanceSession::create([
                 'employee_id' => $employeeId,
-                'attendance_time' => $attendanceTime,
-                'attendance_type' => $type,
-                'device_id' => $data['device_id'] ?? null,
-                'latitude' => $data['latitude'] ?? null,
-                'longitude' => $data['longitude'] ?? null,
-                'sync_status' => 'pending',
-                'sync_attempts' => 0,
-                'attendance_date' => $attendanceDate,
+                'attendance_date' => $sessionDate,
+                'check_in_time' => $data["check_in_time"],
             ]);
 
+        }
 
-            // Find the active RoleSchedule for this employee's role, shift, and attendance date
-            $roleSchedule = $this->getRoleScheduleForDate($employeeProfile, $attendanceDate);
+        if (isset($data["check_out_time"])) {
+            // 2. Find last open session for today
+            $session = AttendanceSession::where('employee_id', $employeeId)
+                ->where('attendance_date', $sessionDate)
+                ->whereNull('check_out_time')
+                ->orderBy('check_in_time', 'desc')
+                ->first();
 
-            // Update attendance record with scheduled times based on roleSchedule (or shift default)
-            $this->updateAttendanceWithScheduledTimes($attendance, $roleSchedule, $employeeProfile);
-
-            // Handle check-in and check-out specific logic
-            if ($type === 'check-in') {
-                $this->validateCheckInTime($attendance, $roleSchedule, $employeeProfile);
-            } elseif ($type === 'check-out') {
-                $this->handleCheckOut($attendance);
-                $this->validateCheckOutTime($attendance, $roleSchedule, $employeeProfile);
+            if (!$session) {
+                throw new InvalidArgumentException("No active session found for checkout.");
             }
 
-            return $attendance;
-        });
-    }
+            // 3. Close session & update earnings
+            $this->handleCheckOut($session, $data);
+
+        }
+
+        if ($session)
+            return $session;
+        else
+            throw new InvalidArgumentException("Unhandled attendance type: check_in_time/check_out_time");
+        
+    });
+}
+
+
 
     /**
      * Retrieves the RoleSchedule for a given employee and date.
@@ -116,9 +124,9 @@ class AttendanceService
 
         if ($roleSchedule) {
             // Prioritize override times from RoleSchedule
-            if ($roleSchedule->override_time_start && $roleSchedule->override_time_end) {
-                $shiftStartTime = Carbon::parse($roleSchedule->override_time_start);
-                $shiftEndTime = Carbon::parse($roleSchedule->override_time_end);
+            if ($roleSchedule->override_start_time && $roleSchedule->override_end_time) {
+                $shiftStartTime = Carbon::parse($roleSchedule->override_start_time);
+                $shiftEndTime = Carbon::parse($roleSchedule->override_end_time);
             } else if ($roleSchedule->shift) {
                 // Fallback to linked Shift times
                 $shiftStartTime = Carbon::parse($roleSchedule->shift->start_time);
@@ -143,7 +151,7 @@ class AttendanceService
         $effectiveEnd = $baseDate->copy()->setTimeFromTimeString($shiftEndTime->format('H:i:s'));
 
         // Adjust for overnight shift if applicable (either from override or shift flag)
-        if ($isOvernight || ($roleSchedule && $roleSchedule->override_time_start && $roleSchedule->override_time_end && $shiftStartTime->greaterThan($shiftEndTime))) {
+        if ($isOvernight || ($roleSchedule && $roleSchedule->override_start_time && $roleSchedule->override_end_time && $shiftStartTime->greaterThan($shiftEndTime))) {
             $effectiveEnd->addDay();
         }
 
@@ -173,85 +181,138 @@ class AttendanceService
     }
 
 
-    protected function validateCheckInTime(DailyAttendance $checkIn, ?RoleSchedule $roleSchedule, EmployeeProfile $employeeProfile): void
-    {
-        list($scheduledStart, $scheduledEnd, $isOvernight) = $this->getEffectiveShiftTimes(
-            $checkIn->attendance_time->copy()->startOfDay(),
-            $roleSchedule
-        );
 
 
-        if (!$roleSchedule) {
-            $scheduledStart = Carbon::parse($employeeProfile->shift->start_time);
-            $scheduledEnd = Carbon::parse($employeeProfile->shift->end_time);
-        }
 
-        // Get grace period from roleSchedule or default
-        $lateGraceMinutes = $roleSchedule ? $roleSchedule->late_grace_minutes : 0;
+protected function validateCheckInTime(AttendanceSession $session, ?RoleSchedule $roleSchedule, EmployeeProfile $employeeProfile): void
+{
+    list($scheduledStart, $scheduledEnd, $isOvernight) = $this->getEffectiveShiftTimes(
+        $session->check_in_time->copy()->startOfDay(),
+        $roleSchedule
+    );
 
-        $actualCheckIn = $checkIn->attendance_time;
-        $difference = $scheduledStart->diffInMinutes($actualCheckIn, false);
-
-        $status = match (true) {
-            $difference < -$lateGraceMinutes => 'early',
-            $difference >= -$lateGraceMinutes && $difference <= $lateGraceMinutes => 'on_time',
-            $difference > $lateGraceMinutes => 'late',
-            default => null,
-        };
-
-        $checkIn->update([
-            'check_status' => $status,
-            'minutes_difference' => $difference,
-        ]);
+    if (!$roleSchedule) {
+        $scheduledStart = Carbon::parse($employeeProfile->shift->start_time);
+        $scheduledEnd   = Carbon::parse($employeeProfile->shift->end_time);
     }
 
+    $lateGraceMinutes = $roleSchedule ? $roleSchedule->late_grace_minutes : 0;
 
-    protected function validateCheckOutTime(DailyAttendance $checkOut, ?RoleSchedule $roleSchedule, EmployeeProfile $employeeProfile): void
-    {
-        list($scheduledStart, $scheduledEnd, $isOvernight) = $this->getEffectiveShiftTimes(
-            $checkOut->attendance_time->copy()->startOfDay(), // Use check-out date as base for scheduled end
-            $roleSchedule
-        );
+    $actualCheckIn = $session->check_in_time;
+    $difference    = $scheduledStart->diffInMinutes($actualCheckIn, false);
 
-        if (!$roleSchedule) {
-            $scheduledStart = $employeeProfile->shift->start_time;
-            $scheduledEnd = $employeeProfile->shift->end_time;
-        }
+    $status = match (true) {
+        $difference < -$lateGraceMinutes => 'early',
+        $difference >= -$lateGraceMinutes && $difference <= $lateGraceMinutes => 'on_time',
+        $difference > $lateGraceMinutes => 'late',
+        default => null,
+    };
 
-        // Adjust scheduledEnd for overnight shifts if the checkOut time is for the next day's portion of the shift
-        // This is a subtle point: if shift is 22:00-06:00, and checkout is 02:00, the scheduledEnd is 06:00 *of that same calendar day*.
-        // The getEffectiveShiftTimes already considers adding a day if it's an overnight shift and the baseDate is the start date.
-        // However, if the checkout happened on the "next day" calendar-wise (e.g., checkout at 02:00 on July 2 for a shift that started July 1 22:00),
-        // the scheduledEnd passed in might be 06:00 July 1, which is incorrect.
-        // We need to ensure scheduledEnd corresponds to the *actual day* the checkOut occurs if it crosses midnight.
-        // The determineShiftWorkDate is good for the "work_date" for payroll, but for *validation*,
-        // we need to compare to the correct scheduled end time on the calendar day of the checkout.
-        if ($isOvernight && $checkOut->attendance_time->isSameDay($scheduledStart->copy()->addDay())) {
-             // If checkout is on the "next day" of an overnight shift,
-             // and scheduledEnd is still on the "start day", move scheduledEnd to the next day.
-             $scheduledEnd = $scheduledEnd->copy()->addDay();
-        }
+    $session->update([
+        'check_in_status'    => $status,
+        'check_in_diff_mins' => $difference,
+    ]);
+}
 
+protected function validateCheckOutTime(AttendanceSession $session, ?RoleSchedule $roleSchedule, EmployeeProfile $employeeProfile): void
+{
+    list($scheduledStart, $scheduledEnd, $isOvernight) = $this->getEffectiveShiftTimes(
+        $session->check_out_time->copy()->startOfDay(),
+        $roleSchedule
+    );
 
-        $actualCheckOut = $checkOut->attendance_time;
-        $earlyLeaveGraceMinutes = $roleSchedule ? $roleSchedule->early_leave_grace_minutes : 5;
-
-        $difference = Carbon::parse($scheduledEnd)->diffInMinutes($actualCheckOut, false);
-
-        $status = match (true) {
-            $difference < -$earlyLeaveGraceMinutes => 'early_checkout',
-            $difference >= -$earlyLeaveGraceMinutes && $difference <= $earlyLeaveGraceMinutes => 'on_time_checkout',
-            $difference > $earlyLeaveGraceMinutes => 'late_checkout',
-            default => null,
-        };
-
-        $checkOut->update([
-            'check_status' => $status,
-            'minutes_difference' => $difference,
-        ]);
+    if (!$roleSchedule) {
+        $scheduledStart = Carbon::parse($employeeProfile->shift->start_time);
+        $scheduledEnd   = Carbon::parse($employeeProfile->shift->end_time);
     }
 
-    protected function handleCheckOut(DailyAttendance $checkout): void
+    if ($isOvernight && $session->check_out_time->isSameDay($scheduledStart->copy()->addDay())) {
+        $scheduledEnd = $scheduledEnd->copy()->addDay();
+    }
+
+    $actualCheckOut        = $session->check_out_time;
+    $earlyLeaveGraceMinutes = $roleSchedule ? $roleSchedule->early_leave_grace_minutes : 5;
+
+    $difference = Carbon::parse($scheduledEnd)->diffInMinutes($actualCheckOut, false);
+
+    $status = match (true) {
+        $difference < -$earlyLeaveGraceMinutes => 'early_checkout',
+        $difference >= -$earlyLeaveGraceMinutes && $difference <= $earlyLeaveGraceMinutes => 'on_time_checkout',
+        $difference > $earlyLeaveGraceMinutes => 'late_checkout',
+        default => null,
+    };
+
+    // Overtime check
+    if (!empty($roleSchedule?->overtime_after_hours)) {
+        $overtimeThreshold = $scheduledEnd->copy()->addHours($roleSchedule->overtime_after_hours);
+        if ($actualCheckOut->greaterThan($overtimeThreshold)) {
+            $status = 'overtime';
+        }
+    }
+
+    $session->update([
+        'check_out_status'    => $status,
+        'check_out_diff_mins' => $difference,
+    ]);
+}
+
+
+
+
+
+protected function handleCheckOut(AttendanceSession $session, $data)
+{
+    $checkOutTime = $data["check_out_time"]; // could also default to now()
+
+    // 1. Save checkout time & session minutes
+    $session->check_out_time = $checkOutTime;
+    $session->session_minutes = Carbon::parse($session->check_in_time)
+        ->diffInMinutes($checkOutTime);
+    $session->save();
+
+    // 2. Calculate total hours for the day
+    $attendanceDate = $session->attendance_date;
+    $employeeId = $session->employee_id;
+
+    $totalMinutesToday = AttendanceSession::where('employee_id', $employeeId)
+        ->where('attendance_date', $attendanceDate)
+        ->sum('session_minutes');
+
+    $totalHoursToday = round($totalMinutesToday / 60, 2);
+
+    // 3. Get employee profile
+    $employeeProfile = EmployeeProfile::with(['shift', 'role', 'roleSchedules'])
+        ->where('employee_id', $employeeId)
+        ->firstOrFail();
+
+    // 4. Use DailyEarningsService to calculate pay breakdown
+    $earnings = app(DailyEarningsService::class)
+        ->calculate($employeeProfile, $totalHoursToday);
+
+    // 5. Save/update daily earnings record
+    DailyEarning::updateOrCreate(
+        [
+            'employee_id' => $employeeId,
+            'work_date'        => $attendanceDate
+        ],
+        [
+            'regular_hours'   => $earnings['regular_hours'],
+            'overtime_hours'  => $earnings['overtime_hours'],
+            'total_hours'     => $earnings['total_hours'],
+            'regular_amount'     => $earnings['regular_amount'],
+            'overtime_amount'    => $earnings['overtime_amount'],
+            'total_amount'       => $earnings['total_amount']
+        ]
+    );
+}
+
+
+
+
+
+
+
+    /*protected function handleCheckOut(DailyAttendance $checkout): void
     {
         $employeeId = $checkout->employee_id;
 
@@ -284,19 +345,26 @@ class AttendanceService
 
         // Determine the work_date for aggregation (important for overnight shifts)
         $workDate = $this->determineShiftWorkDate(Carbon::parse($checkIn->attendance_time), $employeeProfile->shift); // Still relies on shift for work_date logic
-
         // Use the PayrollCalculatorService to get paid minutes
         $calculatedHours = $this->payrollCalculator->calculatePaidHours($checkIn, $checkout, $employeeProfile, $roleSchedule);
+
 
         $regularMinutes = $calculatedHours['regular_minutes'];
         $overtimeMinutes = $calculatedHours['overtime_minutes'];
 
+
+        $hourlyRate = $employeeProfile->hourly_rate ?? 100;
+        $overtimeRateMultiplier = 1; //this should be configurable
+        if (!$roleSchedule?->overtime_after_hours) {
+            $overtimeMinutes = 0;
+        } else {
+            $overtimeRateMultiplier = $roleSchedule->overtimeRateMultiplier? $roleSchedule->overtimeRateMultiplier: 1; //this should be configurable
+        }
+
+
         $regularHours = round($regularMinutes / 60, 2);
         $overtimeHours = round($overtimeMinutes / 60, 2);
         $totalPaidHours = $regularHours + $overtimeHours;
-
-        $hourlyRate = $employeeProfile->hourly_rate ?? 100;
-        $overtimeRateMultiplier = 1.5;
 
         $regularAmount = $regularHours * $hourlyRate;
         $overtimeAmount = $overtimeHours * ($hourlyRate * $overtimeRateMultiplier);
@@ -312,15 +380,20 @@ class AttendanceService
         $earning->overtime_hours = ($earning->overtime_hours ?? 0) + $overtimeHours;
         $earning->total_hours = ($earning->total_hours ?? 0) + $totalPaidHours;
 
-        if (!$roleSchedule) // Handle overtime by default when roleSchedule is not configure by admin
-            $earning = $this->adjustOverHours($earning, $employeeId);
+
+        if (!$roleSchedule?->overtime_after_hours) {
+            // Handle overtime by default when roleSchedule is not configure by admin
+            // $earning = $this->adjustOverHours($earning, $employeeId);
+        }
+
+
 
         $earning->regular_amount = ($earning->regular_amount ?? 0) + $regularAmount;
         $earning->overtime_amount = ($earning->overtime_amount ?? 0) + $overtimeAmount;
         $earning->total_amount = ($earning->total_amount ?? 0) + $totalAmountEarned;
 
         $earning->save();
-    }
+    }*/
 
 
     private function adjustOverHours(DailyEarning $earning, $employeeId): DailyEarning

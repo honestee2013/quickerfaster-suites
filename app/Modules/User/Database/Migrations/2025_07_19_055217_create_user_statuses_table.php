@@ -15,6 +15,7 @@ return new class extends Migration
 			$table->foreignId('user_status_category_id')->nullable()->constrained('user_status_categories', 'id')->setNullOnDelete();
 			$table->string('editable');
 			
+            
             $table->timestamps();
         });
     }

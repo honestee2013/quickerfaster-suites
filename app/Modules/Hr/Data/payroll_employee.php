@@ -52,7 +52,7 @@ return [
       'label' => 'Total Other Deductions',
     ], 
 
-    'gross_salary' =>    [
+    'gross_pay' =>    [
       'display' => 'inline',
       'field_type' => 'number',
       'validation' => 'required|numeric|min:0',
@@ -66,7 +66,7 @@ return [
       'label' => 'Total Deductions',
     ], 
 
-    'net_salary' =>    [
+    'net_pay' =>    [
       'display' => 'inline',
       'field_type' => 'number',
       'validation' => 'required|numeric|min:0',
@@ -79,19 +79,30 @@ return [
       'label' => 'Comments',
     ], 
 
+    'payroll_run_id' =>    [
+      'display' => 'inline',
+      'field_type' => 'select',
+      'validation' => 'nullable',
+      'label' => 'Payroll Run',
+    ], 
+
   ], 
 
   'hiddenFields' =>  [
     'onTable' =>    [
+      0 => 'payroll_run_id',
     ], 
 
     'onNewForm' =>    [
+      0 => 'payroll_run_id',
     ], 
 
     'onEditForm' =>    [
+      0 => 'payroll_run_id',
     ], 
 
     'onQuery' =>    [
+      0 => 'payroll_run_id',
     ], 
 
   ], 
@@ -133,9 +144,9 @@ return [
       'title' => 'Final Calculations',
       'groupType' => 'hr',
       'fields' =>      [
-        0 => 'gross_salary',
+        0 => 'gross_pay',
         1 => 'total_deductions',
-        2 => 'net_salary',
+        2 => 'net_pay',
         3 => 'comments',
       ], 
 
@@ -144,6 +155,21 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
+    'model' => 'App\\Modules\\hr\\Models\\PayrollEmployee',
+    'tableFields' =>    [
+      'employee_id' => 'Employee',
+      'base_salary' => 'Base Salary',
+      'total_allowances' => 'Allowances',
+      'total_bonuses' => 'Bonuses',
+      'gross_pay' => 'Gross',
+      'total_deductions' => 'Deductions',
+      'net_pay' => 'Net',
+      'comments' => 'Comments',
+    ], 
+
   ], 
 
 ];

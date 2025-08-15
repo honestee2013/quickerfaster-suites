@@ -57,12 +57,15 @@ return [
 
   'hiddenFields' =>  [
     'onTable' =>    [
+      0 => 'employee_profile_id',
     ], 
 
     'onNewForm' =>    [
+      0 => 'employee_profile_id',
     ], 
 
     'onEditForm' =>    [
+      0 => 'employee_profile_id',
     ], 
 
     'onQuery' =>    [
@@ -107,6 +110,9 @@ return [
   ], 
 
   'moreActions' =>  [
+  ], 
+
+  'report' =>  [
   ], 
 
 ];

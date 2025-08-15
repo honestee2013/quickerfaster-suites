@@ -1,10 +1,9 @@
 <?php
 
-namespace App\Modules\hr\Models; // Important: Include the module namespace
+namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 
 class Department extends Model
@@ -12,7 +11,6 @@ class Department extends Model
     use HasFactory;
     
     
-
 
     protected $table = 'departments';
 
@@ -26,4 +24,12 @@ class Department extends Model
 	}
 
  // Relations will be inserted here
+
+    /**
+     * Create a new factory instance for the model.
+     */
+    protected static function newFactory()
+    {
+        return \App\Modules\Hr\Database\Factories\DepartmentFactory::new();
+    }
 }

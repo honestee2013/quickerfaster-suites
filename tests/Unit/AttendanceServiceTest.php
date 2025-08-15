@@ -20,7 +20,7 @@ use App\Modules\Hr\Database\Factories\RoleScheduleFactory;
 
 
 use App\Modules\Hr\Models\Shift;
-use App\Modules\Hr\Models\Role;
+use App\Modules\Access\Models\Role;
 use App\Modules\Hr\Models\DayOfWeek;
 use App\Modules\Hr\Models\RoleSchedule;
 use App\Modules\Hr\Models\DailyEarning;
@@ -163,7 +163,7 @@ class AttendanceServiceTest extends TestCase
             'id' => $attendance->id,
             'employee_id' => $employee->id,
             'attendance_type' => 'check-out',
-            'checkin_id' => $checkIn->id,
+            // 'checkin_id' => $checkIn->id,
             'check_status' => 'late_checkout', // From original 17:00 end
             'scheduled_end' => Carbon::now()->setTime(17, 0, 0)->toDateTimeString(),
         ]);
