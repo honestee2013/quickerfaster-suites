@@ -17,11 +17,13 @@ deployment:
 
     # Simulate rsync --delete (remove old files except excluded ones)
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
-    - /bin/bash -c "find \"$DEPLOYPATH\" -mindepth 1 \
-        -not -name '.env' \
-        -not -name '.cpanel.yml' \
-        -not -path \"$DEPLOYPATH/.git*\" \
-        -exec rm -rf {} + " >> $LOGFILE 2>&1
+    - /bin/bash -c 'DEPLOYPATH="/home/quickerf/public_html/suites.quickerfaster.com"; \
+        find "$DEPLOYPATH" -mindepth 1 \
+        -not -name ".env" \
+        -not -name ".cpanel.yml" \
+        -not -path "$DEPLOYPATH/.git*" \
+        -exec rm -rf {} + ' >> $LOGFILE 2>&1
+
 
 
     # Copy files using tar with exclusions
