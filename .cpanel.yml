@@ -25,7 +25,7 @@ deployment:
     - /bin/sh -c 'cd "$REPOPATH" && tar --exclude=".git" \
                                             --exclude=".cpanel.yml" \
                                             --exclude=".env" \
-                                            -cf - . | { cd "$DEPLOYPATH" && tar -xf -; }' >> $LOGFILE 2>&1
+                                            -cf - . | (cd "$DEPLOYPATH" && tar -xf -)' >> $LOGFILE 2>&1
 
     # Install PHP dependencies
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
