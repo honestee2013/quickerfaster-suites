@@ -15,16 +15,11 @@ deployment:
     - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
     - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # Simulate rsync --delete (remove old files except excluded ones)
+    # Simulate rsync --delete (mirror mode without find)
     - /bin/echo "Cleaning destination folder..." >> $LOGFILE
-    - /bin/bash -c 'DEPLOYPATH="/home/quickerf/public_html/suites.quickerfaster.com"; \
-        find "$DEPLOYPATH" -mindepth 1 \
-        -not -name ".env" \
-        -not -name ".cpanel.yml" \
-        -not -path "$DEPLOYPATH/.git*" \
-        -exec rm -rf {} + ' >> $LOGFILE 2>&1
-
-
+    - /bin/sh -c 'for f in $(/bin/ls -A "$DEPLOYPATH"); do
+        [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || /bin/rm -rf "$DEPLOYPATH/$f";
+      done' >> $LOGFILE 2>&1
 
     # Copy files using tar with exclusions
     - /bin/echo "Copying files using tar..." >> $LOGFILE
