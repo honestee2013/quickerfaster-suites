@@ -41,33 +41,33 @@ deployment:
         /bin/echo "Downloading Composer..." >> $LOGFILE &&
         /bin/cd /home/quickerf &&
         /usr/bin/curl -sS https://getcomposer.org/installer -o composer-setup.php &&
-        /usr/bin/php composer-setup.php --quiet &&
+        php composer-setup.php --quiet &&
         /bin/rm composer-setup.php &&
         /bin/echo "Composer installed successfully" >> $LOGFILE;
       fi'
 
     # Install PHP dependencies without running scripts (prevents cache errors)
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
-    - /bin/sh -c 'cd "$DEPLOYPATH" && /usr/bin/php "$COMPOSER_BIN" install --no-dev --no-scripts --optimize-autoloader >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'cd "$DEPLOYPATH" && php "$COMPOSER_BIN" install --no-dev --no-scripts --optimize-autoloader >> "$LOGFILE" 2>&1'
 
     # Run Artisan package discovery & cache commands manually
     - /bin/echo "Running Artisan post-deploy tasks..." >> $LOGFILE
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" package:discover >> "$LOGFILE" 2>&1'
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" config:cache >> "$LOGFILE" 2>&1'
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" route:cache >> "$LOGFILE" 2>&1'
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" view:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" package:discover >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" config:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" route:cache >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" view:cache >> "$LOGFILE" 2>&1'
 
     # Run migrations
     - /bin/echo "Running migrations..." >> $LOGFILE
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" migrate --force >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" migrate --force >> "$LOGFILE" 2>&1'
 
     # Seed database
     - /bin/echo "Seeding database..." >> $LOGFILE
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" db:seed --force >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" db:seed --force >> "$LOGFILE" 2>&1'
 
     # Clear caches as a final cleanup
     - /bin/echo "Clearing caches..." >> $LOGFILE
-    - /bin/sh -c '/usr/bin/php "$DEPLOYPATH/artisan" optimize:clear >> "$LOGFILE" 2>&1'
+    - /bin/sh -c 'php "$DEPLOYPATH/artisan" optimize:clear >> "$LOGFILE" 2>&1'
 
     # End log
     - /bin/echo "===== Deployment finished at $(/bin/date) =====" >> $LOGFILE
