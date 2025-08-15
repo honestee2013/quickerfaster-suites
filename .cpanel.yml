@@ -2,9 +2,16 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/quickerf/public_html/suites.quickerfaster.com
-    - /bin/echo "Syncing files to public_html..."
-    - /bin/rsync -av --delete --exclude=".git" --exclude=".cpanel.yml" --exclude=".env" ./ $DEPLOYPATH
-    - /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH
-    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan migrate --force
-    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan db:seed --force
-    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan optimize:clear
+    - export LOGFILE=/home/quickerf/deploy.log
+    - /bin/echo "---- Deployment started at $(date) ----" >> $LOGFILE 2>&1
+    - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE 2>&1
+    - /usr/bin/git -C $DEPLOYPATH pull >> $LOGFILE 2>&1
+    - /bin/echo "Installing PHP dependencies..." >> $LOGFILE 2>&1
+    - /opt/cpanel/composer/bin/composer install --no-dev --optimize-autoloader --working-dir=$DEPLOYPATH >> $LOGFILE 2>&1
+    - /bin/echo "Running migrations..." >> $LOGFILE 2>&1
+    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan migrate --force >> $LOGFILE 2>&1
+    - /bin/echo "Seeding database..." >> $LOGFILE 2>&1
+    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan db:seed --force >> $LOGFILE 2>&1
+    - /bin/echo "Clearing caches..." >> $LOGFILE 2>&1
+    - /opt/cpanel/php/bin/php $DEPLOYPATH/artisan optimize:clear >> $LOGFILE 2>&1
+    - /bin/echo "---- Deployment finished at $(date) ----" >> $LOGFILE 2>&1
