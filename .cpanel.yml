@@ -21,12 +21,12 @@ deployment:
         [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || /bin/rm -rf "$DEPLOYPATH/$f";
       done' >> $LOGFILE 2>&1
 
-    # Copy files using tar with exclusions
+    # Copy files using tar with exclusions (streaming mode)
     - /bin/echo "Copying files using tar..." >> $LOGFILE
-    - tar --exclude=".git" \
-          --exclude=".cpanel.yml" \
-          --exclude=".env" \
-          -cf - -C $REPOPATH . | tar -xf - -C $DEPLOYPATH >> $LOGFILE 2>&1
+    - /bin/sh -c 'tar --exclude=".git" \
+                      --exclude=".cpanel.yml" \
+                      --exclude=".env" \
+                      -cf - -C "$REPOPATH" . | tar -xf - -C "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
     # Install PHP dependencies
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
