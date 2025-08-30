@@ -76,16 +76,16 @@ return [
       'label' => 'Day Of Week',
     ], 
 
-    'override_start_time' =>    [
+    'override_time_start' =>    [
       'display' => 'inline',
       'field_type' => 'timepicker',
-      'label' => 'Override Start Time',
+      'label' => 'Override Time Start',
     ], 
 
-    'override_end_time' =>    [
+    'override_time_end' =>    [
       'display' => 'inline',
       'field_type' => 'timepicker',
-      'label' => 'Override End Time',
+      'label' => 'Override Time End',
     ], 
 
     'overtime_after_hours' =>    [
@@ -107,13 +107,6 @@ return [
       'field_type' => 'number',
       'validation' => 'nullable|numeric|min:0',
       'label' => 'Overtime Rate Multiplier',
-    ], 
-
-    'override_hourly_rate' =>    [
-      'display' => 'inline',
-      'field_type' => 'number',
-      'validation' => 'nullable|numeric|min:0',
-      'label' => 'Override Hourly Rate',
     ], 
 
     'max_daily_hours' =>    [
@@ -142,12 +135,6 @@ return [
       'display' => 'inline',
       'field_type' => 'select',
       'label' => 'Break Rule',
-    ], 
-
-    'employee_profile_id' =>    [
-      'display' => 'inline',
-      'field_type' => 'select',
-      'label' => 'Employee Profile',
     ], 
 
     'late_grace_minutes' =>    [
@@ -245,8 +232,8 @@ return [
       'title' => 'Overrides and Overtime',
       'groupType' => 'hr',
       'fields' =>      [
-        0 => 'override_start_time',
-        1 => 'override_end_time',
+        0 => 'override_time_start',
+        1 => 'override_time_end',
         2 => 'overtime_after_hours',
         3 => 'break_rule_id',
       ], 

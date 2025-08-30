@@ -12,14 +12,23 @@ models:
         validation:
           - required|unique:employee_profiles,employee_id
 
+      full_name:
+        type: string
+        validation:
+          - required|string|max:255
+
+
       user_id:
         type: select
+        label: Login Name
         foreign:
           table: users
           column: id
           onDelete: cascade
         validation:
-          - required|unique:basic_infos,user_id
+          - nullable|unique:basic_infos,user_id
+        modifiers:
+          nullable: true
 
       department:
         type: string
@@ -50,7 +59,6 @@ models:
           onDelete: set null
         modifiers:
           nullable: true
-          
 
 
       job_title_id:
@@ -145,6 +153,7 @@ models:
         groupType: hr
         fields:
           - employee_id
+          - full_name
           - user_id
           - job_title_id
           - role_id
@@ -189,12 +198,6 @@ models:
         foreignKey: employee_profile_id
         displayField: employee_id # Or appropriate display field
 
-      roleSchedules:
-        type: hasMany
-        model: App\Modules\Hr\Models\RoleSchedule
-        foreignKey: employee_profile_id
-        displayField: name # Or appropriate display field
-
 
       shift:
         type: belongsTo
@@ -204,17 +207,18 @@ models:
 
     sidebar:
       add: true
-      groupTitle: Employee Management
-      title: Employee Details
+      # groupTitle: Employee Management
+      # title: Employee Details
+      title: Employee Profiles
       iconClasses: fas fa-id-card-alt # Or a more suitable icon
       url: employee-profiles
-      submenu:
-        - title: Employee Profiles
-          url: employee-profiles
-        - title: Employee Documents
-          url: employee-documents
-        - title: Job Titles
-          url: job-titles
+      # submenu:
+      #   - title: Employee Profiles
+      #     url: employee-profiles
+      #   - title: Employee Documents
+      #     url: employee-documents
+      #   - title: Job Titles
+      #     url: job-titles
 
     iconClasses: fas fa-briefcase # Or a more suitable icon
     includeHeader: false
@@ -331,7 +335,6 @@ models:
 
 
 
-
   JobTitle:
     module: hr
     fields:
@@ -384,6 +387,73 @@ models:
     controls: all
     simpleActions: ['show', 'edit', 'delete']
 
+
+
+
+  Department:
+    module: hr
+    fields:
+      name:
+        type: string
+        validation:
+          - required|string|max:255
+        label: Department
+
+      company_id:
+        type: select
+        foreign:
+          table: companies
+          column: id
+          onDelete: cascade
+        validation:
+          - required|int
+
+      description:
+        type: textarea
+        modifiers:
+          nullable: true
+
+    hiddenFields:
+      onTable: []
+      onNewForm: []
+      onEditForm: []
+      onQuery: []
+
+    #tab:
+    #  label: Departments
+    #  group: departments-management
+    #  id: departments
+    #  parentPageTitle: Departments Management
+    #  pageTitle: Departments Overview
+    #  view: departments
+    #  url: enterprise/departments
+
+    fieldGroups:
+      - title: Department Information
+        groupType: hr
+        fields:
+          - name
+          - company_id
+          - description
+
+    relations:
+      company:
+        type: belongsTo
+        model: App\Modules\Organization\Models\Company # Updated model namespace
+        foreignKey: company_id
+        displayField: name
+
+    sidebar:
+      add: false
+      title: Departments
+      iconClasses: fas fa-sitemap # Or a more suitable icon
+
+    iconClasses: fas fa-users-cog # Or a more suitable icon
+    includeHeader: false
+    includeFooter: false
+    includeSidebar: true
+    controls: all
+    simpleActions: ['show', 'edit', 'delete']
 
 
 

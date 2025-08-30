@@ -5,7 +5,7 @@
 </x-slot>
 
   <x-slot name="pageHeader">
-    @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Shifts & Compliances"])
+    @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Work Shifts"])
 </x-slot>
 
   <x-core.views::tab-bar>
@@ -13,7 +13,7 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\Shift"
+    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\Shift"
     pageTitle="Shifts Overview"
     queryFilters=[]
     :hiddenFields="[

@@ -3,35 +3,19 @@
 return [
   'model' => 'App\\Modules\\Hr\\Models\\EmployeeProfile',
   'fieldDefinitions' =>  [
-    'roleSchedules' =>    [
-      'field_type' => 'checkbox',
-      'relationship' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\RoleSchedule',
-        'type' => 'hasMany',
-        'display_field' => 'name',
-        'hintField' => NULL,
-        'dynamic_property' => 'roleSchedules',
-        'foreign_key' => 'employee_profile_id',
-        'local_key' => 'id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\RoleSchedule',
-        'column' => 'name',
-        'hintField' => NULL,
-      ], 
-
-      'label' => 'Role Schedules',
-      'multiSelect' => true,
-    ], 
-
     'employee_id' =>    [
       'display' => 'inline',
       'field_type' => 'string',
       'validation' => 'required|unique:employee_profiles,employee_id',
       'label' => 'Employee ID',
       'autoGenerate' => true,
+    ], 
+
+    'full_name' =>    [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'validation' => 'required|string|max:255',
+      'label' => 'Full Name',
     ], 
 
     'user_id' =>    [
@@ -52,8 +36,8 @@ return [
 
       'display' => 'inline',
       'field_type' => 'select',
-      'validation' => 'required|unique:basic_infos,user_id',
-      'label' => 'User',
+      'validation' => 'nullable|unique:basic_infos,user_id',
+      'label' => 'Login Name',
     ], 
 
     'department' =>    [
@@ -233,14 +217,15 @@ return [
       'groupType' => 'hr',
       'fields' =>      [
         0 => 'employee_id',
-        1 => 'user_id',
-        2 => 'job_title_id',
-        3 => 'role_id',
-        4 => 'shift_id',
-        5 => 'employment_type',
-        6 => 'hourly_rate',
-        7 => 'joining_date',
-        8 => 'termination_date',
+        1 => 'full_name',
+        2 => 'user_id',
+        3 => 'job_title_id',
+        4 => 'role_id',
+        5 => 'shift_id',
+        6 => 'employment_type',
+        7 => 'hourly_rate',
+        8 => 'joining_date',
+        9 => 'termination_date',
       ], 
 
     ], 

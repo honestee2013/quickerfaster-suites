@@ -5,16 +5,13 @@
 </x-slot>
 
   <x-slot name="pageHeader">
-    @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Shifts & Compliances"])
+    @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Break Rules Management"])
 </x-slot>
 
-  <x-core.views::tab-bar>
-    <x-hr.views::layouts.navbars.auth.work-shifts-and-compliances-tab-bar-links active='break-rules' />
-</x-core.views::tab-bar>
+  
 
-
-    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\BreakRule"
-    pageTitle="Break Rules Overview"
+    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\BreakRule"
+    pageTitle="Break Rules Management"
     queryFilters=[]
     :hiddenFields="[
   'onTable' => 

@@ -56,7 +56,7 @@
                     <h5 class="mb-4">{{ $pageTitle }} </h5>
 
                 </div>
-                @if (is_array($controls) && in_array('addButton', $controls))
+                @if (is_array($controls) && isset($controls['addButton']) && $controls['addButton'])
                     <button wire:click="$dispatch('openAddModalEvent')"
                         class="btn bg-gradient-primary btn-icon-only rounded-circle" type="button">
                         <i class="fa-solid fa-plus   text-white"></i>

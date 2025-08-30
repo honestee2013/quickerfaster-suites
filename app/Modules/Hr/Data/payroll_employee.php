@@ -56,7 +56,7 @@ return [
       'display' => 'inline',
       'field_type' => 'number',
       'validation' => 'required|numeric|min:0',
-      'label' => 'Gross Salary',
+      'label' => 'Gross Pay',
     ], 
 
     'total_deductions' =>    [
@@ -70,7 +70,7 @@ return [
       'display' => 'inline',
       'field_type' => 'number',
       'validation' => 'required|numeric|min:0',
-      'label' => 'Net Salary',
+      'label' => 'Net Pay',
     ], 
 
     'comments' =>    [

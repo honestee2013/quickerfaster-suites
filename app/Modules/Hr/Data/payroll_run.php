@@ -3,29 +3,6 @@
 return [
   'model' => 'App\\Modules\\Hr\\Models\\PayrollRun',
   'fieldDefinitions' =>  [
-    'payrollEmployees' =>    [
-      'field_type' => 'checkbox',
-      'relationship' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\PayrollEmployee',
-        'type' => 'hasMany',
-        'display_field' => 'employee_id',
-        'hintField' => NULL,
-        'dynamic_property' => 'payrollEmployees',
-        'foreign_key' => 'payroll_run_id',
-        'local_key' => 'id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\PayrollEmployee',
-        'column' => 'employee_id',
-        'hintField' => NULL,
-      ], 
-
-      'label' => 'Payroll Employees',
-      'multiSelect' => true,
-    ], 
-
     'payroll_number' =>    [
       'display' => 'inline',
       'field_type' => 'string',

@@ -11,12 +11,13 @@ Route::group([
     'middleware' => 'auth:sanctum',
 ], function () {
 
-    Route::post('attendance/store', [\App\Modules\Hr\Http\Controllers\AttendanceController::class, 'store'])
-        ->name('hr.attendance.store');
+    /*Route::post('attendance/store', [\App\Modules\Hr\Http\Controllers\AttendanceController::class, 'store'])
+        ->name('hr.attendance.store');*/
 
     Route::post('attendance/batch-store', [\App\Modules\Hr\Http\Controllers\AttendanceController::class, 'batchStore']);
 
-    Route::get('user/sync', [\App\Modules\Hr\Http\Controllers\UserSyncController::class, 'syncUser']);
+    // Route::get('user/sync', [\App\Modules\Hr\Http\Controllers\UserSyncController::class, 'syncUser']);
+    Route::get('user/sync', [\App\Modules\Hr\Http\Controllers\EmployeeSyncController::class, 'syncEmployees']);
 
 
 

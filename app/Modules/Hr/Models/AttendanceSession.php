@@ -16,7 +16,7 @@ class AttendanceSession extends Model
 
 
     protected $fillable = [
-        'attendance_date', 'employee_id', 'check_in_time', 'check_out_time', 'scheduled_start', 'scheduled_end', 'check_in_status', 'check_in_diff_mins', 'check_out_status', 'check_out_diff_mins', 'session_minutes', 'device_id', 'latitude', 'longitude' // Fillable properties will be inserted here
+        'attendance_date', 'employee_id', 'check_in_time', 'check_out_time', 'scheduled_start', 'scheduled_end', 'check_in_status', 'check_in_diff_mins', 'check_out_status', 'check_out_diff_mins', 'session_minutes', 'device_name', 'device_id', 'location_name', 'timezone', 'latitude', 'longitude' // Fillable properties will be inserted here
     ];
 
        public function employee(){

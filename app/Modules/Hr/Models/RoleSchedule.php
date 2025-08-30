@@ -16,7 +16,7 @@ class RoleSchedule extends Model
 
 
     protected $fillable = [
-        'name', 'role_id', 'shift_id', 'day_of_week_id', 'override_start_time', 'override_end_time', 'overtime_after_hours', 'max_paid_overtime_hours', 'overtime_rate_multiplier', 'override_hourly_rate', 'max_daily_hours', 'break_rule_id', 'employee_profile_id', 'late_grace_minutes', 'early_leave_grace_minutes', 'effective_date', 'end_date', 'is_active' // Fillable properties will be inserted here
+        'name', 'role_id', 'shift_id', 'day_of_week_id', 'override_time_start', 'override_time_end', 'overtime_after_hours', 'max_paid_overtime_hours', 'overtime_rate_multiplier', 'max_daily_hours', 'break_rule_id', 'late_grace_minutes', 'early_leave_grace_minutes', 'effective_date', 'end_date', 'is_active' // Fillable properties will be inserted here
     ];
 
        public function role(){

@@ -6,7 +6,7 @@
 
     
 
-    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\Department"
+    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\Department"
     pageTitle="Departments Management"
     queryFilters=[]
     :hiddenFields="[

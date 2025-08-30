@@ -50,7 +50,7 @@ models:
     relations:
       category:
         type: belongsTo
-        model: App\Modules\User\Models\UserStatusCategory # Adjust namespace if needed
+        model: App\Modules\User\Models\UserStatusCategory 
         foreignKey: user_status_category_id
         displayField: name
 

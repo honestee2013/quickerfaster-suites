@@ -7,43 +7,69 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Carbon;
 
 
-
-
-
 class DailyEarningsSeeder extends Seeder
 {
-    public function run(): void
+
+
+    public function run()
     {
-        $employees = ['EMP001', 'EMP002', 'EMP003', 'EMP004'];
+        // Truncate existing records
+        /*DB::table('daily_earnings')->truncate();
 
-        foreach ($employees as $employee) {
-            for ($i = 0; $i < 10; $i++) { // 10 random days
-                $date = Carbon::now()->subDays(rand(0, 30))->toDateString();
-                
-                $regularHours = rand(6, 8);
-                $overtimeHours = rand(0, 3);
-                $totalHours = $regularHours + $overtimeHours;
+        // Get all attendance records with both check-in and check-out
+        $attendanceRecords = DB::table('daily_attendances')
+            ->select('employee_id', 'attendance_date', 'attendance_type', 'attendance_time')
+            ->orderBy('attendance_time')
+            ->get()
+            ->groupBy(['employee_id', 'attendance_date']);
 
-                $regularRate = 2000; // example per hour
-                $overtimeRate = 3000;
+        $earnings = [];
+        $hourlyRates = [];
 
-                $regularAmount = $regularHours * $regularRate;
-                $overtimeAmount = $overtimeHours * $overtimeRate;
-                $totalAmount = $regularAmount + $overtimeAmount;
+        foreach ($attendanceRecords as $employeeId => $dates) {
+            // Assign random hourly rate per employee (8-30 USD)
+            if (!isset($hourlyRates[$employeeId])) {
+                $hourlyRates[$employeeId] = mt_rand(800, 3000) / 100; // 8.00 to 30.00
+            }
 
-                DB::table('daily_earnings')->insert([
-                    'employee_id'      => $employee,
-                    'work_date'        => $date,
-                    'regular_hours'    => $regularHours,
-                    'overtime_hours'   => $overtimeHours,
-                    'total_hours'      => $totalHours,
-                    'regular_amount'   => $regularAmount,
-                    'overtime_amount'  => $overtimeAmount,
-                    'total_amount'     => $totalAmount,
-                    'created_at'       => now(),
-                    'updated_at'       => now(),
-                ]);
+            foreach ($dates as $date => $records) {
+                // We need exactly one check-in and one check-out
+                $checkIn = $records->where('attendance_type', 'check-in')->first();
+                $checkOut = $records->where('attendance_type', 'check-out')->first();
+
+                if (!$checkIn || !$checkOut) continue;
+
+                $start = Carbon::parse($checkIn->attendance_time);
+                $end = Carbon::parse($checkOut->attendance_time);
+
+                // Calculate hours worked (max 14 hours, min 0.5 hours)
+                $hoursWorked = max(0.5, min(14, $end->diffInMinutes($start) / 60));
+                $hoursWorked = round($hoursWorked, 2);
+
+                // Calculate amount earned
+                $amountEarned = round($hoursWorked * $hourlyRates[$employeeId], 2);
+
+                $earnings[] = [
+                    'employee_id' => $employeeId,
+                    'work_date' => $date,
+                    'hours_worked' => $hoursWorked,
+                    'amount_earned' => $amountEarned,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
             }
         }
+
+        // Insert records in chunks
+        /*foreach (array_chunk($earnings, 500) as $chunk) {
+            DB::table('daily_earnings')->insert($chunk);
+        }*/
     }
+
+
+
+
 }
+
+
+

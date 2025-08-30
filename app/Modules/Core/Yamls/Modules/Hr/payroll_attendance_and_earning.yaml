@@ -80,12 +80,35 @@ models:
           nullable: true
 
 
-      device_id:
+      device_name:
         type: string
         validation:
           - required
         modifiers:
           nullable: true
+
+      device_id:
+        type: string
+        label: Device ID
+        validation:
+          - required
+        modifiers:
+          nullable: true
+
+      location_name:
+        type: string
+        validation:
+          - required
+        modifiers:
+          nullable: true
+
+      timezone:
+        type: string
+        validation:
+          - required
+        modifiers:
+          nullable: true
+
 
       latitude:
         type: integer
@@ -172,13 +195,14 @@ models:
       add: true
       title: Attendance & Earnings
       iconClasses: fas fa-clipboard-check # Or a more suitable icon
-      submenu:
-        - title: Daily Attendance
-          url: daily-attendance
-          iconClasses: fas fa-list # Or a more suitable icon
-        - title: Daily Earnings
-          url: daily-earnings
-          iconClasses: fas fa-money-bill-wave-alt # Or a more suitable icon
+      url: daily-attendance
+      # submenu:
+      #   - title: Daily Attendance
+      #     url: daily-attendance
+      #     iconClasses: fas fa-list # Or a more suitable icon
+      #   - title: Daily Earnings
+      #     url: daily-earnings
+      #     iconClasses: fas fa-money-bill-wave-alt # Or a more suitable icon
 
 
 
@@ -187,8 +211,23 @@ models:
     includeHeader: false
     includeFooter: false
     includeSidebar: true
-    controls: all
-    simpleActions: ['show', 'edit', 'delete']
+    simpleActions: ['show']
+
+
+    controls:
+      files:
+        export: [xls, csv, pdf]
+        print: true
+
+      bulkActions:
+        export: [xls, csv, pdf]
+        delete: true
+
+      perPage: [5, 10, 25, 50, 100, 200, 500]
+      search: true
+      showHideColumns: true
+      # addButton: false
+
 
 
 
@@ -312,12 +351,28 @@ models:
     #  title: Daily Earnings
     #  iconClasses: fas fa-money-bill-wave-alt # Or a more suitable icon
 
+
     iconClasses: fas fa-wallet # Or a more suitable icon
     includeHeader: true
     includeFooter: true
     includeSidebar: true
-    controls: all
-    simpleActions: ['show', 'edit', 'delete']
+
+    controls:
+      files:
+        export: [xls, csv, pdf]
+        print: true
+
+      bulkActions:
+        export: [xls, csv, pdf]
+        delete: true
+
+      perPage: [5, 10, 25, 50, 100, 200, 500]
+      search: true
+      showHideColumns: true
+      # addButton: false
+
+    simpleActions: [show]
+
 
 
 

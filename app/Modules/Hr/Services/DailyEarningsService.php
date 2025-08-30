@@ -21,8 +21,8 @@ class DailyEarningsService
     public function calculate($employee, $totalWorkedHours)
     {
         // Step 1: Get role schedule (highest priority)
-        $roleSchedule = $employee->roleSchedules
-            ->where('is_active', 'yes')
+        $roleSchedule = RoleSchedule::where('role_id', $employee->role_id)
+            // ->where('is_active', 'yes')
             ->first();
 
         // Step 2: Determine shift source
@@ -159,7 +159,7 @@ protected function calculateHoursBetween($startTime, $endTime, $isOvernight)
     $totalMinutes = AttendanceSession::where('employee_id', $employee->employee_id)
         ->whereDate('attendance_date', Carbon::parse($date)->format("Y-m-d"))
         ->sum('session_minutes');
-  
+
 
     if ($totalMinutes <= 0) {
         return null; // no work done
@@ -179,7 +179,7 @@ protected function calculateHoursBetween($startTime, $endTime, $isOvernight)
         ->first();
 
     if ($roleSchedule) {
-       
+
         $maxHours = $roleSchedule->max_daily_hours ?? Carbon::parse($employee->shift->end_time)
             ->diffInHours(Carbon::parse($employee->shift->start_time));
 dd($totalHours, $maxHours);

@@ -13,11 +13,3 @@
     anchorClasses="{{ ($active == 'payroll-employees')? 'active': ''}}"
 />
 
-
-<x-core.views::layouts.navbars.sidebar-link-item
-    iconClasses="fas fa-dollar-sign"
-    url="hr/payroll-ytd"
-    title="Payroll YTD"
-    anchorClasses="{{ ($active == 'payroll-ytd')? 'active': ''}}"
-/>
-

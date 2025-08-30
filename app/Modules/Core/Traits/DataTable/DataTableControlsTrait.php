@@ -9,12 +9,11 @@ trait DataTableControlsTrait
 
 
     public function getPreparedControls($controls) {
-        if (!isset($controls))
-            return [];
+        dd("aaaaa");
+        if (!is_array($controls) && $controls == strtolower("all"))
+            return $this->getDataTableAllControls();
         else if (is_array($controls))
             return $controls; // Do nothing
-        else if ($controls == strtolower("all"))
-            return $this->getDataTableAllControls();
 
     }
 
@@ -24,7 +23,7 @@ trait DataTableControlsTrait
     public function getDataTableAllControls()
     {
         return [
-            'addButton',
+            'addButton' => true,
             'files' => [
                 'export' => ['xls', 'csv', 'pdf'],
                 'import' => ['xls', 'csv'],
@@ -35,8 +34,8 @@ trait DataTableControlsTrait
                 'delete',
             ],
             'perPage' => [5, 10, 25, 50, 100, 200, 500],
-            'search',
-            'showHideColumns',
+            'search' => true,
+            'showHideColumns' => true,
         ];
     }
 

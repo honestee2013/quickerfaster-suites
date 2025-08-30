@@ -77,11 +77,32 @@ return [
       'label' => 'Session Minutes',
     ], 
 
+    'device_name' =>    [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'validation' => 'required',
+      'label' => 'Device Name',
+    ], 
+
     'device_id' =>    [
       'display' => 'inline',
       'field_type' => 'string',
       'validation' => 'required',
-      'label' => 'Device',
+      'label' => 'Device ID',
+    ], 
+
+    'location_name' =>    [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'validation' => 'required',
+      'label' => 'Location Name',
+    ], 
+
+    'timezone' =>    [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'validation' => 'required',
+      'label' => 'Timezone',
     ], 
 
     'latitude' =>    [
@@ -118,13 +139,45 @@ return [
 
   'simpleActions' =>  [
     0 => 'show',
-    1 => 'edit',
-    2 => 'delete',
   ], 
 
   'isTransaction' => false,
   'dispatchEvents' => false,
-  'controls' => 'all',
+  'controls' =>  [
+    'files' =>    [
+      'export' =>      [
+        0 => 'xls',
+        1 => 'csv',
+        2 => 'pdf',
+      ], 
+
+      'print' => true,
+    ], 
+
+    'bulkActions' =>    [
+      'export' =>      [
+        0 => 'xls',
+        1 => 'csv',
+        2 => 'pdf',
+      ], 
+
+      'delete' => true,
+    ], 
+
+    'perPage' =>    [
+      0 => 5,
+      1 => 10,
+      2 => 25,
+      3 => 50,
+      4 => 100,
+      5 => 200,
+      6 => 500,
+    ], 
+
+    'search' => true,
+    'showHideColumns' => true,
+  ], 
+
   'fieldGroups' =>  [
     0 =>    [
       'title' => 'Attendance Details',

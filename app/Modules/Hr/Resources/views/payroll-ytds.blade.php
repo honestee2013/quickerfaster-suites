@@ -5,13 +5,13 @@
 </x-slot>
 
   <x-slot name="pageHeader">
-    @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Compliance Standards Management"])
+    @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Payroll Ytds Management"])
 </x-slot>
 
   
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\ComplianceStandard"
-    pageTitle="Compliance Standards Management"
+    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\PayrollYtd"
+    pageTitle="Payroll Ytds Management"
     queryFilters=[]
     :hiddenFields="[
   'onTable' => 

@@ -2,7 +2,7 @@ models:
   BreakRule:
     module: hr
     fields:
-      name: 
+      name:
         type: string
         validation:
           - required
@@ -53,7 +53,7 @@ models:
           onDelete: set null
         modifiers:
           nullable: true
-          
+
       is_mandatory:
         type: radio
         options: Yes, No
@@ -74,14 +74,14 @@ models:
       onEditForm: []
       onQuery: []
 
-    tab:
-      label: Break Rules
-      group: work-shifts-and-compliances
-      id: break-rules
-      parentPageTitle: Shifts & Compliances
-      pageTitle: Break Rules Overview
-      view: break-rules
-      url: hr/break-rules
+    #tab:
+    #  label: Break Rules
+    #  group: work-shifts-and-compliances
+    #  id: break-rules
+    #  parentPageTitle: Shifts & Compliances
+    #  pageTitle: Break Rules Overview
+    #  view: break-rules
+    #  url: hr/break-rules
 
     fieldGroups:
       - title: Rule Triggers
@@ -114,29 +114,30 @@ models:
         displayField: name # Or a suitable display field for your ComplianceStandard model
 
     sidebar:
-      add: true
-      title: Shifts & Compliances
-      groupTitle: Work Shedules & Compliances
+      add: false
+      # title: Shifts & Compliances
+      title: Work Shifts
+      # groupTitle: Work Shedules & Compliances
       iconClasses: fas fa-pause-circle # Or a more suitable icon
       url: break-rules
       submenu:
-        - title: Break Rules
-          url: break-rules
-          iconClasses: fas fa-coffee # Or a more suitable icon
-        - title: Shifts
-          url: shifts
-          iconClasses: fas fa-clock # Or a more suitable icon
-        - title: Days of Week
-          url: days-of-week
-          iconClasses: fas fa-calendar-day # Or a more suitable icon
-        - title: Compliance Standards
-          url: compliance-standards
-          iconClasses: fas fa-clipboard-check # Or a more suitable icon
+        # - title: Break Rules
+        #   url: break-rules
+        #   iconClasses: fas fa-coffee # Or a more suitable icon
+        # - title: Shifts
+        #   url: shifts
+        #   iconClasses: fas fa-clock # Or a more suitable icon
+        # - title: Days of Week
+        #   url: days-of-week
+        #   iconClasses: fas fa-calendar-day # Or a more suitable icon
+        # - title: Compliance Standards
+        #   url: compliance-standards
+        #   iconClasses: fas fa-clipboard-check # Or a more suitable icon
 
 
 
 
-      
+
 
     iconClasses: fas fa-coffee # Or a more suitable icon
     includeHeader: true
@@ -180,7 +181,8 @@ models:
       label: Shifts
       group: work-shifts-and-compliances
       id: shifts
-      parentPageTitle: Shifts & Compliances
+      # parentPageTitle: Shifts & Compliances
+      parentPageTitle: Work Shifts
       pageTitle: Shifts Overview
       view: shifts
       url: hr/shifts
@@ -196,8 +198,8 @@ models:
           - is_active
 
     sidebar:
-      add: false
-      title: Shifts
+      add: true
+      title: Work Shifts
       iconClasses: fas fa-sun # Or a more suitable icon
 
     iconClasses: fas fa-clock # Or a more suitable icon
@@ -291,14 +293,14 @@ models:
       onEditForm: []
       onQuery: []
 
-    tab:
-      label: Compliance Standards
-      group: work-shifts-and-compliances
-      id: compliance-standards
-      parentPageTitle: Shifts & Compliances
-      pageTitle: Manage Compliance Standards
-      view: compliance-standards
-      url: hr/compliance-standards
+    # tab:
+    #   label: Compliance Standards
+    #   group: work-shifts-and-compliances
+    #   id: compliance-standards
+    #   parentPageTitle: Shifts & Compliances
+    #   pageTitle: Manage Compliance Standards
+    #   view: compliance-standards
+    #   url: hr/compliance-standards
 
     fieldGroups:
       - title: Standard Details

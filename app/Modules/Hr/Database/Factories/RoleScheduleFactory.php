@@ -26,11 +26,11 @@ class RoleScheduleFactory extends Factory
             'role_id' => Role::factory(),
             'shift_id' => Shift::factory(),
             'day_of_week_id' => DayOfWeek::factory(), // Or specific dayOfWeek()
-            'override_start_time' => null,
-            'override_end_time' => null,
+            'override_time_start' => null,
+            'override_time_end' => null,
             'overtime_after_hours' => null,
             'max_paid_overtime_hours' => null,
-            // 'max_daily_hours' => null,
+            'max_daily_hours' => null,
             'break_rule_id' => BreakRule::factory()->unpaidStandard(),
             'late_grace_minutes' => 5,
             'early_leave_grace_minutes' => 5,
@@ -71,8 +71,8 @@ class RoleScheduleFactory extends Factory
     {
         return $this->state(function (array $attributes) use ($start, $end) {
             return [
-                'override_start_time' => $start,
-                'override_end_time' => $end,
+                'override_time_start' => $start,
+                'override_time_end' => $end,
             ];
         });
     }

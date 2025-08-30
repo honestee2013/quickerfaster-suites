@@ -16,7 +16,7 @@ class EmployeeProfile extends Model
 
 
     protected $fillable = [
-        'employee_id', 'user_id', 'department', 'designation', 'shift_id', 'employee_profile_id', 'job_title_id', 'role_id', 'employment_type', 'hourly_rate', 'work_location', 'joining_date', 'termination_date', 'notes' // Fillable properties will be inserted here
+        'employee_id', 'full_name', 'user_id', 'department', 'designation', 'shift_id', 'employee_profile_id', 'job_title_id', 'role_id', 'employment_type', 'hourly_rate', 'work_location', 'joining_date', 'termination_date', 'notes' // Fillable properties will be inserted here
     ];
 
        public function user(){
@@ -33,10 +33,6 @@ class EmployeeProfile extends Model
 
    public function employeeProfile(){
 		return $this->belongsTo('App\Modules\Hr\Models\EmployeeProfile', 'employee_profile_id');
-	}
-
-   public function roleSchedules(){
-		return $this->hasMany('App\Modules\Hr\Models\RoleSchedule');
 	}
 
    public function shift(){

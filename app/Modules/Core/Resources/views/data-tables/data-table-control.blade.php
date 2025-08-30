@@ -3,6 +3,7 @@
 
     <!-- Files -->
     @if (isset($controls['files']))
+
         <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto " wire:ignore>
             <a href="#" class="btn bg-gradient-primary dropdown-toggle mb-2 bt-sm pt-2  rounded-pill w-100 px-5"
                 data-bs-toggle="dropdown" id="navbarDropdownMenuLink2" style=" height: 3em; ">
@@ -97,6 +98,7 @@
 
     <!-- Bulk Action -->
     @if (isset($controls['bulkActions']))
+
         <div class="input-group col-12 w-100 col-sm-auto w-sm-auto" x-show="$wire.selectedRows.length">
             <select wire:model="bulkAction" class="form-select p-1 ps-3 pe-sm-5 px-sm-4 m-0"
                 style = "height: 2.6em;
@@ -142,9 +144,11 @@
     @endif
 
 
+
     <!-- Rows Per Page, Search & Hide Columns Section -->
     <!-- Rows Per Page -->
     @if (isset($controls['perPage']))
+
         <div class="input-group col-12 w-100 col-sm-auto w-sm-auto ">
             <label class="input-group-text" for="recordsPerPage"
                 style = "
@@ -164,8 +168,10 @@
         </div>
     @endif
 
+
     <!-- Search Box -->
-    @if (in_array('search', $controls))
+    @if (isset($controls['search']) && $controls['search'])
+
         <div class="input-group mb-2 col-12 w-100 col-sm-auto w-sm-auto">
             <span class="input-group-text"
                 style="
@@ -184,8 +190,10 @@
 
 
 
+
     <!-- Filter Columns -->
-    @if (in_array('filterColumns', $controls))
+    @if (isset($controls['filterColumns']) && $controls['filterColumns'])
+
         <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto" >
             <a href="#" class="btn bg-gradient-primary dropdown-toggle bt-sm pt-2 me-2 w-100"
                 data-bs-toggle="dropdown" id="filterDropdownMenuLink" style="border-radius: 3em; height: 3em">
@@ -229,7 +237,8 @@
 
 
     <!-- Show / Hide Columns -->
-    @if (in_array('showHideColumns', $controls))
+    @if (isset($controls['showHideColumns']) && $controls['showHideColumns'])
+
         <div class="dropdown col-12 w-100 col-sm-auto w-sm-auto">
             <a href="#" class="btn bg-gradient-primary dropdown-toggle bt-sm pt-2 me-2 w-100"
                 data-bs-toggle="dropdown" id="navbarDropdownMenuLink2" style="border-radius: 3em; height: 3em">

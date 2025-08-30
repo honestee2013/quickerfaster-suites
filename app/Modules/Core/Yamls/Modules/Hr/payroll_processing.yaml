@@ -118,12 +118,12 @@ models:
           default: 'Yes'
 
 
-    relations:
-      payrollEmployees:
-        type: hasMany
-        model: App\Modules\Hr\Models\PayrollEmployee # Adjust namespace if needed
-        foreignKey: payroll_run_id
-        displayField: employee_id # Or appropriate display field
+    #relations:
+    #  payrollEmployees:
+    #    type: hasMany
+    #    model: App\Modules\Hr\Models\PayrollEmployee # Adjust namespace if needed
+    #    foreignKey: payroll_run_id
+    #    displayField: employee_id # Or appropriate display field
 
 
 
@@ -219,14 +219,14 @@ models:
       add: true
       title: Payroll Processing
       iconClasses: fas fa-file-invoice-dollar # Or a more suitable icon
-      groupTitle: Payroll Management
-      submenu:
-        - title: Payroll Runs
-          url: payroll-runs
-        - title: Payroll Employees
-          url: payroll-employees
-        - title: Payroll YTD
-          url: payroll-ytd
+      # groupTitle: Payroll Management
+      #submenu:
+      #  - title: Payroll Runs
+      #    url: payroll-runs
+      #  - title: Payroll Employees
+      #    url: payroll-employees
+      #  - title: Payroll YTD
+      #    url: payroll-ytd
 
 
     iconClasses: fas fa-money-bill-wave # Or a more suitable icon
@@ -570,14 +570,14 @@ models:
       onEditForm: []
       onQuery: []
 
-    tab:
-      label: Payroll YTD
-      group: payroll-processing
-      id: payroll-ytd
-      parentPageTitle: Payroll Processing
-      pageTitle: Payroll Year-to-Date
-      view: payroll-ytd
-      url: hr/payroll-ytd
+    # tab:
+    #   label: Payroll YTD
+    #   group: payroll-processing
+    #   id: payroll-ytd
+    #   parentPageTitle: Payroll Processing
+    #   pageTitle: Payroll Year-to-Date
+    #   view: payroll-ytd
+    #   url: hr/payroll-ytd
 
     fieldGroups:
       - title: Employee and Year

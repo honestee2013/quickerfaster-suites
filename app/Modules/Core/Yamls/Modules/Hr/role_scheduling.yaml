@@ -16,8 +16,6 @@ models:
           onDelete: cascade
         validation:
           - required
-        modifiers:
-          nullable: true
 
       shift_id:
         type: select
@@ -27,8 +25,6 @@ models:
           onDelete: cascade
         validation:
           - required
-        modifiers:
-          nullable: true
 
       day_of_week_id:
         type: select
@@ -38,15 +34,13 @@ models:
           onDelete: cascade
         validation:
           - required
-        modifiers:
-          nullable: true
 
-      override_start_time:
+      override_time_start:
         type: timepicker
         modifiers:
           nullable: true
 
-      override_end_time:
+      override_time_end:
         type: timepicker
         modifiers:
           nullable: true
@@ -70,7 +64,6 @@ models:
 
       overtime_rate_multiplier:
         type: decimal
-        default: 1.5
         modifiers:
           precision: 4,2
           nullable: true
@@ -78,14 +71,6 @@ models:
           - nullable|numeric|min:0
 
 
-      override_hourly_rate:
-        type: decimal
-        modifiers:
-          precision: 4,2
-          nullable: true
-        validation:
-          - nullable|numeric|min:0
-          
 
       max_daily_hours:
         type: decimal
@@ -105,40 +90,21 @@ models:
         modifiers:
           nullable: true
 
-      employee_profile_id:
-        type: select
-        foreign:
-          table: employee_profiles # Assuming 'break_rules' table exists
-          column: id
-          onDelete: set null # Or 'restrict' if a break rule must exist
-        modifiers:
-          nullable: true
-
-
       late_grace_minutes:
         type: integer
         default: 5
         validation:
           - required|integer|min:0
-        modifiers:
-          nullable: true
-
       early_leave_grace_minutes:
         type: integer
         default: 5
         validation:
           - required|integer|min:0
-        modifiers:
-          nullable: true
-
       effective_date:
         type: datepicker
         default: 'now()->toDateString()' # Represents Laravel's now()
         validation:
           - required|date
-        modifiers:
-          nullable: true
-          
       end_date:
         type: datepicker
         modifiers:
@@ -159,14 +125,14 @@ models:
       onEditForm: []
       onQuery: []
 
-    tab:
-      label: Role Schedules
-      group: schedule-management
-      id: role-schedules
-      parentPageTitle: Schedule Management
-      pageTitle: Role Schedules
-      view: role-schedules
-      url: hr/role-schedules
+    # tab:
+    #   label: Role Schedules
+    #   group: schedule-management
+    #   id: role-schedules
+    #   parentPageTitle: Schedule Management
+    #   pageTitle: Role Schedules
+    #   view: role-schedules
+    #   url: hr/role-schedules
 
     fieldGroups:
       - title: Schedule Assignment
@@ -189,8 +155,8 @@ models:
       - title: Overrides and Overtime
         groupType: hr
         fields:
-          - override_start_time
-          - override_end_time
+          - override_time_start
+          - override_time_end
           - overtime_after_hours
           - break_rule_id
 
@@ -226,21 +192,22 @@ models:
 
     sidebar:
       add: true
-      title: Role Schedules
+      # title: Role Schedules
+      title: Work Schedules
       iconClasses: fas fa-calendar-alt # Or a more suitable icon
-      submenu:
-        - title: Role Schedules
-          url: role-schedules
-          iconClasses: fas fa-business-time # Or a more suitable icon
-        - title: User Schedules
-          url: user-schedules
+      # submenu:
+      #   - title: Role Schedules
+      #     url: role-schedules
+      #     iconClasses: fas fa-business-time # Or a more suitable icon
+      #   - title: User Schedules
+      #     url: user-schedules
 
 
 
 
     iconClasses: fas fa-business-time # Or a more suitable icon
-    includeHeader: true
-    includeFooter: true
+    includeHeader: false
+    includeFooter: false
     includeSidebar: true
     controls: all
     simpleActions: ['show', 'edit', 'delete']
@@ -281,7 +248,7 @@ UserSchedule:
         type: timepicker
         modifiers:
           nullable: true
-          
+
       end_time:
         type: timepicker
         modifiers:
@@ -293,14 +260,14 @@ UserSchedule:
       onEditForm: []
       onQuery: []
 
-    tab:
-      label: User Schedules
-      group: schedule-management
-      id: user-schedules
-      parentPageTitle: Schedule Management
-      pageTitle: User Schedules Overview
-      view: user-schedules
-      url: hr/user-schedules
+    # tab:
+    #   label: User Schedules
+    #   group: schedule-management
+    #   id: user-schedules
+    #   parentPageTitle: Schedule Management
+    #   pageTitle: User Schedules Overview
+    #   view: user-schedules
+    #   url: hr/user-schedules
 
     fieldGroups:
       - title: User Schedule Override
