@@ -13,11 +13,11 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\PayrollRun"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\PayrollRun"
     pageTitle="Payroll Runs Overview"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
     0 => 'roleAllowances',
     1 => 'roleBonuses',
@@ -26,7 +26,7 @@
     4 => 'roleDeductions',
     5 => 'employeeDeductions',
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
     0 => 'editable',
     1 => 'status',
@@ -45,7 +45,7 @@
     14 => 'roleDeductions',
     15 => 'employeeDeductions',
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
     0 => 'editable',
     1 => 'status',
@@ -64,7 +64,7 @@
     14 => 'roleDeductions',
     15 => 'employeeDeductions',
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

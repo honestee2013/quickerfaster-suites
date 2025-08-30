@@ -13,23 +13,23 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\DailyEarning"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\DailyEarning"
     pageTitle="Daily Earnings Overview"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
     0 => 'employee_profile_id',
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
     0 => 'employee_profile_id',
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
     0 => 'employee_profile_id',
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

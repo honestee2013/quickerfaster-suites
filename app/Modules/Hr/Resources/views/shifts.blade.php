@@ -13,20 +13,20 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\Shift"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\Shift"
     pageTitle="Shifts Overview"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

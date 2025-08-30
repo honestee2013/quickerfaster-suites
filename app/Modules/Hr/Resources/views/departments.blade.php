@@ -4,22 +4,22 @@
     </x-core.views::layouts.navbars.auth.sidebar>
 </x-slot>
 
-    
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\Department"
+
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\Department"
     pageTitle="Departments Management"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"
@@ -28,5 +28,5 @@
 />
 
 
-    
+
 </x-core.views::layouts.app>

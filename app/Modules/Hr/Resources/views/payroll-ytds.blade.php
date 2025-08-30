@@ -8,22 +8,22 @@
     @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Payroll Ytds Management"])
 </x-slot>
 
-  
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\PayrollYtd"
+
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\PayrollYtd"
     pageTitle="Payroll Ytds Management"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

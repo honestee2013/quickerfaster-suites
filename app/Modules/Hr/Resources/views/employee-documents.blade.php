@@ -13,21 +13,21 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\EmployeeDocument"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\EmployeeDocument"
     pageTitle="Employee Documents"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
     0 => 'file_path',
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

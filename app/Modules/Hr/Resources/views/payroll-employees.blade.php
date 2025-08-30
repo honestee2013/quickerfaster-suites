@@ -13,23 +13,23 @@
 </x-core.views::tab-bar>
 
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\PayrollEmployee"
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\PayrollEmployee"
     pageTitle="Payroll Employees Details"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
     0 => 'payroll_run_id',
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
     0 => 'payroll_run_id',
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
     0 => 'payroll_run_id',
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
     0 => 'payroll_run_id',
   ],

@@ -8,22 +8,22 @@
     @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Compliance Standards Management"])
 </x-slot>
 
-  
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\ComplianceStandard"
+
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\ComplianceStandard"
     pageTitle="Compliance Standards Management"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

@@ -8,22 +8,22 @@
     @include('core.views::components.layouts.navbars.auth.content-header', [ "pageTitile" => "Break Rules Management"])
 </x-slot>
 
-  
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\BreakRule"
+
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\BreakRule"
     pageTitle="Break Rules Management"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"

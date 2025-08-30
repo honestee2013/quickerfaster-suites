@@ -4,22 +4,22 @@
     </x-core.views::layouts.navbars.auth.sidebar>
 </x-slot>
 
-    
 
-    <livewire:data-tables.data-table-manager model="App\Modules\hr\Models\RoleSchedule"
+
+    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\RoleSchedule"
     pageTitle="Role Schedules Management"
     queryFilters=[]
     :hiddenFields="[
-  'onTable' => 
+  'onTable' =>
   [
   ],
-  'onNewForm' => 
+  'onNewForm' =>
   [
   ],
-  'onEditForm' => 
+  'onEditForm' =>
   [
   ],
-  'onQuery' => 
+  'onQuery' =>
   [
   ],
 ]"
@@ -28,5 +28,5 @@
 />
 
 
-    
+
 </x-core.views::layouts.app>
