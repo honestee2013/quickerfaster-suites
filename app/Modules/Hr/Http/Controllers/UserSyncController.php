@@ -17,12 +17,13 @@ class UserSyncController extends Controller
             ->map(function ($user) {
                 return [
                     'user_id' => $user->id,
-                    'name' => $user->full_name?? "Unknown by Server",
+                    //'name' => $user->name,
 
                     'username' => $user->username,
                     'password' => $user->password,
                     'role' => $user->employeeProfile->role->name,
 
+                    'name' =>  optional($user->employeeProfile)->full_name,
                     'employee_id' => optional($user->employeeProfile)->employee_id,
                     'department' => optional($user->employeeProfile)->department,
                     'designation' => optional($user->employeeProfile)->designation,
