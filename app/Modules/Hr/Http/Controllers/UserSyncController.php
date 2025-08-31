@@ -6,29 +6,27 @@ namespace App\Modules\Hr\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Modules\Hr\Models\EmployeeProfile;
+
 
 class UserSyncController extends Controller
 {
     public function syncUser()
     {
-        $user = User::with(['employeeProfile', 'basicInfo'])
-            ->whereHas('employeeProfile')
+        $profiles = EmployeeProfile::with(['user.basicInfo', 'role'])
             ->get()
-            ->map(function ($user) {
+            ->map(function ($profile) {
                 return [
-                    'user_id' => $user->id,
-                    //'name' => $user->name,
-
-                    'username' => $user->username,
-                    'password' => $user->password,
-                    'role' => $user->employeeProfile->role->name,
-
-                    'name' =>  optional($user->employeeProfile)->full_name,
-                    'employee_id' => optional($user->employeeProfile)->employee_id,
-                    'department' => optional($user->employeeProfile)->department,
-                    'designation' => optional($user->employeeProfile)->designation,
-                    'profile_picture' => optional($user->basicInfo)->profile_picture
-                        ? asset('storage/' . $user->basicInfo->profile_picture)
+                    'user_id' => optional($profile->user)->id,
+                    'username' => optional($profile->user)->username,
+                    'password' => optional($profile->user)->password,
+                    'role' => optional($profile->role)->name,
+                    'name' => $profile->full_name,
+                    'employee_id' => $profile->employee_id,
+                    'department' => $profile->department,
+                    'designation' => $profile->designation,
+                    'profile_picture' => optional(optional($profile->user)->basicInfo)->profile_picture
+                        ? asset('storage/' . $profile->user->basicInfo->profile_picture)
                         : null,
                 ];
             });
@@ -36,7 +34,7 @@ class UserSyncController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'User data synced successfully.',
-            'data' => $user,
+            'data' => $profiles,
         ]);
     }
 }
