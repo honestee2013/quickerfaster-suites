@@ -17,7 +17,7 @@ class UserSyncController extends Controller
             ->map(function ($user) {
                 return [
                     'user_id' => $user->id,
-                    'name' => $user->name,
+                    'name' => $user->full_name?? "Unknown by Server",
 
                     'username' => $user->username,
                     'password' => $user->password,

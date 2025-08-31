@@ -27,6 +27,7 @@ class EmployeeSyncController extends Controller
 
                     // From Employee Profile
                     'employee_id'   => $employee->employee_id,
+                    'full_name'     => $employee->full_name,
                     'department'    => $employee->department,
                     'designation'   => $employee->designation,
 
