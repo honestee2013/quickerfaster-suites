@@ -3,24 +3,103 @@
 namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use App\Modules\Hr\Models\PaySchedule;
+use App\Modules\Hr\Models\PayrollPayslip;
+
 use Illuminate\Database\Eloquent\Model;
 
 
-class PayrollRun extends Model
+class PayrollRun extends Model 
 {
     use HasFactory;
     
-    protected $displayFields =['title','payroll_number']; 
+    
 
+    
 
     protected $table = 'payroll_runs';
-
+    
+    
+    
+    
+    
 
     protected $fillable = [
-        'payroll_number', 'title', 'from_date', 'to_date', 'status', 'payroll_components', 'attendance_options', 'created_by', 'approved_by', 'approved_at', 'paid_by', 'paid_at', 'cancelled_by', 'cancelled_at', 'notes', 'editable' // Fillable properties will be inserted here
+        'pay_schedule_id', 'period_start', 'period_end', 'status', 'processed_by', 'processed_at', 'notes'
     ];
 
-     // Relations will be inserted here
+    protected $guarded = [
+        
+    ];
+
+    protected $casts = [
+        'period_start' => 'date',
+        'period_end' => 'date',
+        'processed_at' => 'datetime'
+    ];
+
+    protected $dispatchesEvents = [
+        
+    ];
+
+    /**
+     * Validation rules for the model.
+     */
+    protected static $rules = [
+        
+    ];
+
+    /**
+     * Custom validation messages.
+     */
+    protected static $messages = [
+        
+    ];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+    }
+
+    /**
+     * Validate the model instance.
+     */
+    public function validate()
+    {
+        $validator = Validator::make($this->attributesToArray(), static::$rules, static::$messages);
+        
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Save the model to the database with validation.
+     */
+    public function save(array $options = [])
+    {
+        $this->validate();
+        return parent::save($options);
+    }
+
+    public function paySchedule()
+    {
+        return $this->belongsTo(\App\Modules\Hr\Models\PaySchedule::class, 'pay_schedule_id', 'id');
+    }
+
+    public function payslips()
+    {
+        return $this->hasMany(\App\Modules\Hr\Models\PayrollPayslip::class, 'payroll_run_id', 'id');
+    }
 
     /**
      * Create a new factory instance for the model.

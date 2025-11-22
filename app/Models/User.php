@@ -2,73 +2,53 @@
 
 namespace App\Models;
 
-use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Models\Role;
-use App\Modules\User\Models\BasicInfo;
-use App\Modules\User\Models\UserStatus;
-
-use Spatie\Permission\Traits\HasRoles;
-use Illuminate\Notifications\Notifiable;
-
-use App\Modules\Hr\Models\EmployeeProfile;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use QuickerFaster\CodeGen\Traits\GUI\HasDisplayName;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
 
 
-class User extends Authenticatable
+
+
+
+class User extends Authenticatable implements MustVerifyEmail
 {
-    use HasApiTokens, HasFactory, Notifiable;
-    use HasRoles, HasDisplayName;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
-    protected $displayFields =['name','email'];
-
-
-    protected $guard_name = 'web'; // ✅ important line
-
-    protected $table = 'users';
-
-
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var string[]
+     */
     protected $fillable = [
-        'name', 'email', 'user_status_id', 'email_verified_at', 'password', 'password_confirmation', 'remember_token', 'user_type' // Fillable properties will be inserted here
+        'name',
+        'email',
+        'password',
+        'phone',
+        'location',
+        'about_me',
+        'company_id'
     ];
 
-     // Relations will be inserted here
-    public function basicInfo(){
-		return $this->hasOne(BasicInfo::class, 'user_id');
-	}
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'password',
+        'remember_token',
+    ];
 
-    public function employeeProfile(){
-		return $this->hasOne(EmployeeProfile::class, 'user_id');
-	}
-
-    public function profile() {
-        return $this->employeeProfile;
-    }
-
-
-    public function userStatus()
-    {
-        return $this->belongsTo(UserStatus::class, 'user_status_id');
-    }
-    public function getUserStatusNameAttribute()
-    {
-        return $this->userStatus ? $this->userStatus->display_name : null;
-    }
-
-
-
-
-
-
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+    ];
 
 }
-
-
-
-
-
-
-
-

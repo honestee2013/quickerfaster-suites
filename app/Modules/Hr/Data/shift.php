@@ -1,87 +1,210 @@
 <?php
 
 return [
-  'model' => 'App\\Modules\\Hr\\Models\\Shift',
-  'fieldDefinitions' =>  [
-    'name' =>    [
+  'model' => 'App\Modules\Hr\Models\Shift',
+  'fieldDefinitions' => [
+    'name' => [
       'display' => 'inline',
       'field_type' => 'string',
-      'validation' => 'required|unique:shifts,name',
-      'label' => 'Name',
-    ], 
-
-    'start_time' =>    [
+      'label' => 'Shift Name',
+      'validation' => 'required|string|max:255',
+    ],
+    'code' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Shift Code',
+      'validation' => 'required|string|max:50|unique:shifts,code',
+    ],
+    'start_time' => [
       'display' => 'inline',
       'field_type' => 'timepicker',
-      'validation' => 'required',
       'label' => 'Start Time',
-    ], 
-
-    'end_time' =>    [
+      'validation' => 'required',
+    ],
+    'end_time' => [
       'display' => 'inline',
       'field_type' => 'timepicker',
-      'validation' => 'required',
       'label' => 'End Time',
-    ], 
-
-    'is_overnight' =>    [
+      'validation' => 'required',
+    ],
+    'duration_hours' => [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'label' => 'Duration Hours',
+      'maxSizeMB' => 1,
+    ],
+    'break_duration' => [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'label' => 'Break Duration',
+      'validation' => 'required|numeric|min:0',
+    ],
+    'is_overnight' => [
       'display' => 'inline',
       'field_type' => 'checkbox',
       'label' => 'Is Overnight',
-    ], 
-
-    'is_active' =>    [
+      'validation' => 'required|boolean',
+    ],
+    'color' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Color',
+      'validation' => 'required|string|max:7',
+    ],
+    'description' => [
+      'display' => 'inline',
+      'field_type' => 'textarea',
+      'label' => 'Description',
+      'maxSizeMB' => 1,
+    ],
+    'is_active' => [
       'display' => 'inline',
       'field_type' => 'checkbox',
       'label' => 'Is Active',
-    ], 
-
-  ], 
-
-  'hiddenFields' =>  [
-    'onTable' =>    [
-    ], 
-
-    'onNewForm' =>    [
-    ], 
-
-    'onEditForm' =>    [
-    ], 
-
-    'onQuery' =>    [
-    ], 
-
-  ], 
-
-  'simpleActions' =>  [
-    0 => 'show',
-    1 => 'edit',
-    2 => 'delete',
-  ], 
-
+      'validation' => 'required|boolean',
+    ],
+    'applicable_departments' => [
+      'display' => 'inline',
+      'field_type' => 'select',
+      'label' => 'Applicable Departments',
+      'validation' => 'required',
+      'options' => [
+        'All Departments' => 'All Departments',
+        'Specific Departments' => 'Specific Departments',
+      ],
+    ],
+    'overtime_starts_after' => [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'label' => 'Overtime Starts After (hours)',
+      'validation' => 'required|numeric|min:0',
+    ],
+    'grace_period_minutes' => [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'label' => 'Grace Period Minutes',
+      'validation' => 'required|integer|min:0',
+    ],
+    'max_shift_hours' => [
+      'display' => 'inline',
+      'field_type' => 'number',
+      'label' => 'Max Shift Hours',
+      'validation' => 'required|numeric|min:0',
+    ],
+    'shiftSchedules' => [
+      'field_type' => 'checkbox',
+      'relationship' => [
+        'model' => 'App\Modules\Hr\Models\ShiftSchedule',
+        'type' => 'hasMany',
+        'display_field' => 'schedule_date',
+        'hintField' => '',
+        'dynamic_property' => 'shiftSchedules',
+        'foreign_key' => 'shift_id',
+        'local_key' => 'id',
+        'inlineAdd' => false,
+      ],
+      'options' => [
+        'model' => 'App\Modules\Hr\Models\ShiftSchedule',
+        'column' => 'schedule_date',
+        'hintField' => '',
+      ],
+      'label' => 'Shiftschedules',
+      'multiSelect' => true,
+      'display' => 'inline',
+    ],
+    'attendanceRecords' => [
+      'field_type' => 'checkbox',
+      'relationship' => [
+        'model' => 'App\Modules\Hr\Models\Attendance',
+        'type' => 'hasMany',
+        'display_field' => 'date',
+        'hintField' => '',
+        'dynamic_property' => 'attendanceRecords',
+        'foreign_key' => 'shift_id',
+        'local_key' => 'id',
+        'inlineAdd' => false,
+      ],
+      'options' => [
+        'model' => 'App\Modules\Hr\Models\Attendance',
+        'column' => 'date',
+        'hintField' => '',
+      ],
+      'label' => 'Attendancerecords',
+      'multiSelect' => true,
+      'display' => 'inline',
+    ],
+  ],
+  'hiddenFields' => [
+    'onTable' => [],
+    'onNewForm' => [
+      '0' => 'duration_hours',
+    ],
+    'onEditForm' => [],
+    'onQuery' => [],
+  ],
+  'simpleActions' => [
+    '0' => 'show',
+    '1' => 'edit',
+    '2' => 'delete',
+  ],
   'isTransaction' => false,
   'dispatchEvents' => false,
   'controls' => 'all',
-  'fieldGroups' =>  [
-    0 =>    [
-      'title' => 'Shift Details',
-      'groupType' => 'hr',
-      'fields' =>      [
-        0 => 'name',
-        1 => 'start_time',
-        2 => 'end_time',
-        3 => 'is_overnight',
-        4 => 'is_active',
-      ], 
-
-    ], 
-
-  ], 
-
-  'moreActions' =>  [
-  ], 
-
-  'report' =>  [
-  ], 
-
+  'fieldGroups' => [
+    '0' => [
+      'title' => 'Basic Shift Information',
+      'groupType' => 'time',
+      'fields' => [
+        '0' => 'name',
+        '1' => 'code',
+        '2' => 'description',
+        '3' => 'color',
+        '4' => 'is_active',
+      ],
+    ],
+    '1' => [
+      'title' => 'Shift Timing',
+      'groupType' => 'time',
+      'fields' => [
+        '0' => 'start_time',
+        '1' => 'end_time',
+        '2' => 'duration_hours',
+        '3' => 'is_overnight',
+        '4' => 'break_duration',
+      ],
+    ],
+    '2' => [
+      'title' => 'Shift Rules',
+      'groupType' => 'time',
+      'fields' => [
+        '0' => 'overtime_starts_after',
+        '1' => 'grace_period_minutes',
+        '2' => 'max_shift_hours',
+      ],
+    ],
+    '3' => [
+      'title' => 'Applicability',
+      'groupType' => 'time',
+      'fields' => [
+        '0' => 'applicable_departments',
+      ],
+    ],
+  ],
+  'moreActions' => [],
+  'switchViews' => [],
+  'relations' => [
+    'shiftSchedules' => [
+      'type' => 'hasMany',
+      'model' => 'App\Modules\Hr\Models\ShiftSchedule',
+      'foreignKey' => 'shift_id',
+      'displayField' => 'schedule_date',
+    ],
+    'attendanceRecords' => [
+      'type' => 'hasMany',
+      'model' => 'App\Modules\Hr\Models\Attendance',
+      'foreignKey' => 'shift_id',
+      'displayField' => 'date',
+    ],
+  ],
+  'report' => [],
 ];

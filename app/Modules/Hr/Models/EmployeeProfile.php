@@ -3,43 +3,95 @@
 namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use App\Modules\Hr\Models\Employee;
+
 use Illuminate\Database\Eloquent\Model;
 
 
-class EmployeeProfile extends Model
+class EmployeeProfile extends Model 
 {
     use HasFactory;
     
     
 
-    protected $table = 'employee_profiles';
+    
 
+    protected $table = 'employee_profiles';
+    
+    
+    
+    
+    
 
     protected $fillable = [
-        'employee_id', 'full_name', 'user_id', 'department', 'designation', 'shift_id', 'employee_profile_id', 'job_title_id', 'role_id', 'employment_type', 'hourly_rate', 'work_location', 'joining_date', 'termination_date', 'notes' // Fillable properties will be inserted here
+        'photo', 'employee_id', 'middle_name', 'preferred_name', 'personal_email', 'personal_phone', 'work_phone', 'emergency_contact_name', 'emergency_contact_phone', 'emergency_contact_relationship', 'passport_number', 'passport_expiry_date', 'national_id_number', 'bio'
     ];
 
-       public function user(){
-		return $this->belongsTo('App\Models\User', 'user_id');
-	}
+    protected $guarded = [
+        
+    ];
 
-   public function jobTitle(){
-		return $this->belongsTo('App\Modules\Hr\Models\JobTitle', 'job_title_id');
-	}
+    protected $casts = [
+        'passport_expiry_date' => 'date'
+    ];
 
-   public function role(){
-		return $this->belongsTo('App\Modules\Access\Models\Role', 'role_id');
-	}
+    protected $dispatchesEvents = [
+        
+    ];
 
-   public function employeeProfile(){
-		return $this->belongsTo('App\Modules\Hr\Models\EmployeeProfile', 'employee_profile_id');
-	}
+    /**
+     * Validation rules for the model.
+     */
+    protected static $rules = [
+        
+    ];
 
-   public function shift(){
-		return $this->belongsTo('App\Modules\Hr\Models\Shift', 'shift_id');
-	}
+    /**
+     * Custom validation messages.
+     */
+    protected static $messages = [
+        
+    ];
 
- // Relations will be inserted here
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+    }
+
+    /**
+     * Validate the model instance.
+     */
+    public function validate()
+    {
+        $validator = Validator::make($this->attributesToArray(), static::$rules, static::$messages);
+        
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Save the model to the database with validation.
+     */
+    public function save(array $options = [])
+    {
+        $this->validate();
+        return parent::save($options);
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo(\App\Modules\Hr\Models\Employee::class, 'employee_id', 'id');
+    }
 
     /**
      * Create a new factory instance for the model.

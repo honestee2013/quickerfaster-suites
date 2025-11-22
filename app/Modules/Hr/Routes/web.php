@@ -1,22 +1,70 @@
 <?php
 
-
 use Illuminate\Support\Facades\Route;
-use App\Modules\Hr\Http\Controllers\IdCardController;
+
+
+
 use App\Modules\Hr\Http\Controllers\PayrollRunController;
+use App\Modules\Hr\Http\Controllers\PayrollReportController;
+use App\Modules\Hr\Http\Controllers\PayslipController;
 
-use Illuminate\Support\Carbon;
+use Stancl\Tenancy\Middleware\InitializeTenancyByDomain;
+use Stancl\Tenancy\Middleware\PreventAccessFromCentralDomains;
 
 
-// Example route for HR managers to view a specific employee's ID card
-// This route should be protected by appropriate authorization (e.g., 'role:hr_manager')
-Route::middleware(['auth'])->group(function () {
-    Route::get('/employee-id-card/show/{id}', [IdCardController::class, 'showEmployeeIdCard'])->name('show.employee.id.card');
-    Route::get('/employee-id-card/download/{id}', [IdCardController::class, 'downloadEmployeeIdCard'])->name('download.employee.id.card');
-    Route::get('/payroll-runs/{payrollRun}/generate', [PayrollRunController::class, 'generatePayroll'])
-    ->name('payroll-runs.generate');
+
+
+
+Route::middleware([
+    'web',
+    InitializeTenancyByDomain::class,
+    PreventAccessFromCentralDomains::class,
+
+])->group(function () {
+
+
+
+
+    // Preview modal
+    Route::get('/hr/payroll-runs/{payrollRun}/preview', [PayrollRunController::class, 'preview'])
+        ->name('payroll.runs.preview');
+
+    // Approve action
+    Route::post('/hr/payroll-runs/{payrollRun}/approve', [PayrollRunController::class, 'approve'])
+        ->name('payroll.runs.approve');
+
+
+    // Preview modal
+    Route::get('/hr/payroll-runs/{payrollRun}/edit', [PayrollRunController::class, 'edit'])
+        ->name('payroll.payroll-employees.edit');
+
+
+    // Payroll Reports
+    Route::get('/hr/payroll-runs/{payrollRun}/report', [PayrollReportController::class, 'show'])
+        ->name('payroll.reports.show');
+
+    Route::get('/hr/payroll-runs/{payrollRun}/report/download/pdf', [PayrollReportController::class, 'downloadPdf'])
+        ->name('payroll.reports.download.pdf');
+
+    Route::get('/hr/payroll-runs/{payrollRun}/report/download/excel', [PayrollReportController::class, 'downloadExcel'])
+        ->name('payroll.reports.download.excel');
+
+
+
+    // Employee payslips
+    Route::get('/hr/payslips/{payslip}', [PayslipController::class, 'download'])
+        ->name('payslips.download');
+    //->middleware('auth');
+
+    // HR admin payslips
+    Route::get('/hr/payslips/{payslip}/view', [PayslipController::class, 'view'])
+        ->name('payslips.view');
+    //->middleware('can:manage-payroll');
+
+
+
+    // Route::post('/payroll-runs/{payrollRun}/generate-payslips', [PayrollRunController::class, 'generatePayslips']);
+    // Route::post('/payroll-runs/{payrollRun}/mark-as-paid', [PayrollRunController::class, 'markAsPaid']);
+
 
 });
-
-
-

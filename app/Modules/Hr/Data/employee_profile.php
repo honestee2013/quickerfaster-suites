@@ -1,266 +1,177 @@
 <?php
 
 return [
-  'model' => 'App\\Modules\\Hr\\Models\\EmployeeProfile',
-  'fieldDefinitions' =>  [
-    'employee_id' =>    [
+  'model' => 'App\Modules\Hr\Models\EmployeeProfile',
+  'fieldDefinitions' => [
+    'photo' => [
       'display' => 'inline',
-      'field_type' => 'string',
+      'field_type' => 'file',
+      'label' => 'Photo',
+      'maxSizeMB' => 1,
+      'fileTypes' => [
+        '0' => 'jpg',
+        '1' => 'jpeg',
+        '2' => 'png',
+        '3' => 'bmp',
+      ],
+      'validation' => 'mimes:jpg,jpeg,png,bmp|max:1024',
+    ],
+    'employee_id' => [
+      'display' => 'inline',
+      'field_type' => 'select',
+      'label' => 'Employee Number',
       'validation' => 'required|unique:employee_profiles,employee_id',
-      'label' => 'Employee ID',
-      'autoGenerate' => true,
-    ], 
-
-    'full_name' =>    [
+      'relationship' => [
+        'model' => 'App\Modules\Hr\Models\Employee',
+        'type' => 'belongsTo',
+        'display_field' => 'employee_number',
+        'dynamic_property' => 'employee',
+        'foreign_key' => 'employee_id',
+        'inlineAdd' => false,
+      ],
+      'options' => [
+        'model' => 'App\Modules\Hr\Models\Employee',
+        'column' => 'employee_number',
+        'hintField' => 'first_name',
+      ],
+    ],
+    'middle_name' => [
       'display' => 'inline',
       'field_type' => 'string',
-      'validation' => 'required|string|max:255',
-      'label' => 'Full Name',
-    ], 
-
-    'user_id' =>    [
-      'relationship' =>      [
-        'model' => 'App\\Models\\User',
-        'type' => 'belongsTo',
-        'display_field' => 'name',
-        'dynamic_property' => 'user',
-        'foreign_key' => 'user_id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Models\\User',
-        'column' => 'name',
-        'hintField' => NULL,
-      ], 
-
-      'display' => 'inline',
-      'field_type' => 'select',
-      'validation' => 'nullable|unique:basic_infos,user_id',
-      'label' => 'Login Name',
-    ], 
-
-    'department' =>    [
+      'label' => 'Middle Name',
+      'maxSizeMB' => 1,
+    ],
+    'preferred_name' => [
       'display' => 'inline',
       'field_type' => 'string',
-      'label' => 'Department',
-    ], 
-
-    'designation' =>    [
+      'label' => 'Preferred Name',
+      'maxSizeMB' => 1,
+    ],
+    'personal_email' => [
       'display' => 'inline',
       'field_type' => 'string',
-      'label' => 'Designation',
-    ], 
-
-    'shift_id' =>    [
-      'relationship' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\Shift',
-        'type' => 'belongsTo',
-        'display_field' => 'name',
-        'dynamic_property' => 'shift',
-        'foreign_key' => 'shift_id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\Shift',
-        'column' => 'name',
-        'hintField' => NULL,
-      ], 
-
-      'display' => 'inline',
-      'field_type' => 'select',
-      'validation' => 'required|int',
-      'label' => 'Shift',
-    ], 
-
-    'employee_profile_id' =>    [
-      'relationship' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\EmployeeProfile',
-        'type' => 'belongsTo',
-        'display_field' => 'employee_id',
-        'dynamic_property' => 'employeeProfile',
-        'foreign_key' => 'employee_profile_id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\EmployeeProfile',
-        'column' => 'employee_id',
-        'hintField' => NULL,
-      ], 
-
-      'display' => 'inline',
-      'field_type' => 'select',
-      'label' => 'Reporting Manager ID',
-    ], 
-
-    'job_title_id' =>    [
-      'relationship' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\JobTitle',
-        'type' => 'belongsTo',
-        'display_field' => 'title',
-        'dynamic_property' => 'jobTitle',
-        'foreign_key' => 'job_title_id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Modules\\Hr\\Models\\JobTitle',
-        'column' => 'title',
-        'hintField' => NULL,
-      ], 
-
-      'display' => 'inline',
-      'field_type' => 'select',
-      'validation' => 'required',
-      'label' => 'Job Title',
-    ], 
-
-    'role_id' =>    [
-      'relationship' =>      [
-        'model' => 'App\\Modules\\Access\\Models\\Role',
-        'type' => 'belongsTo',
-        'display_field' => 'name',
-        'dynamic_property' => 'role',
-        'foreign_key' => 'role_id',
-        'inlineAdd' => false,
-      ], 
-
-      'options' =>      [
-        'model' => 'App\\Modules\\Access\\Models\\Role',
-        'column' => 'name',
-        'hintField' => NULL,
-      ], 
-
-      'display' => 'inline',
-      'field_type' => 'select',
-      'validation' => 'required',
-      'label' => 'Primary Role',
-    ], 
-
-    'employment_type' =>    [
-      'display' => 'inline',
-      'field_type' => 'select',
-      'validation' => 'required',
-      'options' =>      [
-        'Full-Time' => 'Full-Time',
-        ' Part-Time' => ' Part-Time',
-        ' Contract' => ' Contract',
-      ], 
-
-      'label' => 'Employment Type',
-    ], 
-
-    'hourly_rate' =>    [
-      'display' => 'inline',
-      'field_type' => 'number',
-      'validation' => 'required',
-      'label' => 'Hourly Rate',
-    ], 
-
-    'work_location' =>    [
+      'label' => 'Personal Email',
+      'validation' => 'required|email|unique:employee_profiles,personal_email',
+    ],
+    'personal_phone' => [
       'display' => 'inline',
       'field_type' => 'string',
-      'label' => 'Work Location',
-    ], 
-
-    'joining_date' =>    [
+      'label' => 'Personal Phone',
+      'maxSizeMB' => 1,
+    ],
+    'work_phone' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Work Phone',
+      'maxSizeMB' => 1,
+    ],
+    'emergency_contact_name' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Emergency Contact Name',
+      'maxSizeMB' => 1,
+    ],
+    'emergency_contact_phone' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Emergency Contact Phone',
+      'maxSizeMB' => 1,
+    ],
+    'emergency_contact_relationship' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Emergency Contact Relationship',
+      'maxSizeMB' => 1,
+    ],
+    'passport_number' => [
+      'display' => 'inline',
+      'field_type' => 'string',
+      'label' => 'Passport Number',
+      'maxSizeMB' => 1,
+    ],
+    'passport_expiry_date' => [
       'display' => 'inline',
       'field_type' => 'datepicker',
-      'validation' => 'required|string|max:255',
-      'label' => 'Joining Date',
-    ], 
-
-    'termination_date' =>    [
+      'label' => 'Passport Expiry Date',
+      'maxSizeMB' => 1,
+    ],
+    'national_id_number' => [
       'display' => 'inline',
-      'field_type' => 'datepicker',
-      'label' => 'Termination Date',
-    ], 
-
-    'notes' =>    [
+      'field_type' => 'string',
+      'label' => 'National Number',
+      'maxSizeMB' => 1,
+    ],
+    'bio' => [
       'display' => 'inline',
       'field_type' => 'textarea',
-      'validation' => 'nullable',
-      'label' => 'Notes',
-    ], 
-
-  ], 
-
-  'hiddenFields' =>  [
-    'onTable' =>    [
-    ], 
-
-    'onNewForm' =>    [
-    ], 
-
-    'onEditForm' =>    [
-    ], 
-
-    'onQuery' =>    [
-    ], 
-
-  ], 
-
-  'simpleActions' =>  [
-    0 => 'show',
-    1 => 'edit',
-    2 => 'delete',
-  ], 
-
+      'label' => 'Bio',
+      'maxSizeMB' => 1,
+    ],
+  ],
+  'hiddenFields' => [
+    'onTable' => [],
+    'onNewForm' => [],
+    'onEditForm' => [],
+    'onQuery' => [],
+  ],
+  'simpleActions' => [
+    '0' => 'show',
+    '1' => 'edit',
+    '2' => 'delete',
+  ],
   'isTransaction' => false,
   'dispatchEvents' => false,
   'controls' => 'all',
-  'fieldGroups' =>  [
-    0 =>    [
-      'title' => 'Basic Employee Information',
+  'fieldGroups' => [
+    'extended_personal_information' => [
+      'title' => 'Extended Personal Information',
       'groupType' => 'hr',
-      'fields' =>      [
-        0 => 'employee_id',
-        1 => 'full_name',
-        2 => 'user_id',
-        3 => 'job_title_id',
-        4 => 'role_id',
-        5 => 'shift_id',
-        6 => 'employment_type',
-        7 => 'hourly_rate',
-        8 => 'joining_date',
-        9 => 'termination_date',
-      ], 
-
-    ], 
-
-    1 =>    [
-      'title' => 'Job Details',
+      'fields' => [
+        '0' => 'photo',
+        '1' => 'employee_id',
+        '2' => 'middle_name',
+        '3' => 'preferred_name',
+        '4' => 'bio',
+      ],
+    ],
+    'additional_contact_information' => [
+      'title' => 'Additional Contact Information',
       'groupType' => 'hr',
-      'fields' =>      [
-        0 => 'department',
-        1 => 'designation',
-        2 => 'employee_profile_id',
-        3 => 'work_location',
-        4 => 'notes',
-      ], 
-
-    ], 
-
-  ], 
-
-  'moreActions' =>  [
-    0 =>    [
-      'title' => 'Show ID Card',
-      'icon' => 'fas fa-id-card',
-      'route' => 'show.employee.id.card',
-    ], 
-
-    1 =>    [
-      'title' => 'Download ID Card (PDF]',
-      'icon' => 'fas fa-file-pdf',
-      'route' => 'download.employee.id.card',
-    ], 
-
-  ], 
-
-  'report' =>  [
-  ], 
-
+      'fields' => [
+        '0' => 'personal_email',
+        '1' => 'personal_phone',
+        '2' => 'work_phone',
+      ],
+    ],
+    'emergency_contact' => [
+      'title' => 'Emergency Contact',
+      'groupType' => 'hr',
+      'fields' => [
+        '0' => 'emergency_contact_name',
+        '1' => 'emergency_contact_phone',
+        '2' => 'emergency_contact_relationship',
+      ],
+    ],
+    'identification_documents' => [
+      'title' => 'Identification Documents',
+      'groupType' => 'hr',
+      'fields' => [
+        '0' => 'passport_number',
+        '1' => 'passport_expiry_date',
+        '2' => 'national_id_number',
+      ],
+    ],
+  ],
+  'moreActions' => [],
+  'switchViews' => [],
+  'relations' => [
+    'employee' => [
+      'type' => 'belongsTo',
+      'model' => 'App\Modules\Hr\Models\Employee',
+      'foreignKey' => 'employee_id',
+      'displayField' => 'employee_number',
+      'hintField' => 'first_name',
+    ],
+  ],
+  'report' => [],
 ];

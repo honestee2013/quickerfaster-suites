@@ -3,23 +3,92 @@
 namespace App\Modules\Hr\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+
+
 use Illuminate\Database\Eloquent\Model;
 
 
-class JobTitle extends Model
+class JobTitle extends Model 
 {
     use HasFactory;
     
     
 
-    protected $table = 'job_titles';
+    
 
+    protected $table = 'job_titles';
+    
+    
+    
+    
+    
 
     protected $fillable = [
-        'title', 'description', 'editable' // Fillable properties will be inserted here
+        'title', 'description', 'editable'
     ];
 
-     // Relations will be inserted here
+    protected $guarded = [
+        
+    ];
+
+    protected $casts = [
+        
+    ];
+
+    protected $dispatchesEvents = [
+        
+    ];
+
+    /**
+     * Validation rules for the model.
+     */
+    protected static $rules = [
+        
+    ];
+
+    /**
+     * Custom validation messages.
+     */
+    protected static $messages = [
+        
+    ];
+
+    /**
+     * Boot the model.
+     */
+    protected static function boot()
+    {
+        parent::boot();
+        
+    }
+
+    /**
+     * Validate the model instance.
+     */
+    public function validate()
+    {
+        $validator = Validator::make($this->attributesToArray(), static::$rules, static::$messages);
+        
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+        
+        return true;
+    }
+
+    /**
+     * Save the model to the database with validation.
+     */
+    public function save(array $options = [])
+    {
+        $this->validate();
+        return parent::save($options);
+    }
+
+    
 
     /**
      * Create a new factory instance for the model.

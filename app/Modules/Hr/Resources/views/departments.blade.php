@@ -1,32 +1,30 @@
-<x-core.views::layouts.app>
+
+
+<x-qf::livewire.bootstrap.layouts.app>
+    <x-slot name="topNav">
+        <livewire:qf::layouts.navs.top-nav moduleName="hr">
+    </x-slot>
+
     <x-slot name="sidebar">
-    <x-core.views::layouts.navbars.auth.sidebar moduleName="hr">
-    </x-core.views::layouts.navbars.auth.sidebar>
-</x-slot>
+        <livewire:qf::layouts.navs.sidebar context="settings"  moduleName="hr">
+    </x-slot>
+    
+    <x-slot name="bottomBar">
+        <livewire:qf::layouts.navs.bottom-bar context="settings" moduleName="hr">
+    </x-slot>
 
-
-
-    <livewire:data-tables.data-table-manager model="App\Modules\Hr\Models\Department"
-    pageTitle="Departments Management"
-    queryFilters=[]
-    :hiddenFields="[
-  'onTable' =>
-  [
-  ],
-  'onNewForm' =>
-  [
-  ],
-  'onEditForm' =>
-  [
-  ],
-  'onQuery' =>
-  [
-  ],
+   
+    <livewire:qf::data-tables.data-table-manager :selectedItemId="$id??null" model="App\Modules\hr\Models\Department"
+            pageTitle="Departments"
+            queryFilters=[]
+            :hiddenFields="[
+    'onTable' => [],
+    'onNewForm' => [],
+    'onEditForm' => [],
+    'onQuery' => [],
 ]"
-    :queryFilters="[
-]"
-/>
+            :queryFilters="[]"
+        />
+</x-qf::livewire.bootstrap.layouts.app>
 
 
-
-</x-core.views::layouts.app>
