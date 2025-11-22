@@ -11,7 +11,7 @@
         "php": "^8.1",
         "guzzlehttp/guzzle": "^7.4",
         "laravel/framework": "^10.0",
-        "laravel/sanctum": "^4.0",
+        "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.6",
         "quicker-faster/laravel-ui": "dev-main"
     },
@@ -20,7 +20,7 @@
         "fakerphp/faker": "^1.17",
         "laravel/sail": "^1.12",
         "mockery/mockery": "^1.4.2",
-        "nunomaduro/collision": "^8.1",
+        "nunomaduro/collision": "^7.0",
         "phpunit/phpunit": "^10.0",
         "quicker-faster/laravel-code-gen": "dev-main"
 
