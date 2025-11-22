@@ -1,35 +1,35 @@
 {
     "name": "laravel/laravel",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "The Laravel Framework.",
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.1",
-        "guzzlehttp/guzzle": "^7.2",
-        "laravel/framework": "^10.10",
-        "laravel/sanctum": "^3.3",
-        "laravel/tinker": "^2.8",
-        "laravel/ui": "^4.6",
-        "quicker-faster/code-gen": "dev-main",
-        "simplesoftwareio/simple-qrcode": "^4.2"
+        "guzzlehttp/guzzle": "^7.4",
+        "laravel/framework": "^11.0",
+        "laravel/sanctum": "^4.0",
+        "laravel/tinker": "^2.6",
+        "quicker-faster/laravel-ui": "dev-main"
     },
     "require-dev": {
-        "fakerphp/faker": "^1.9.1",
-        "laravel/pint": "^1.0",
-        "laravel/sail": "^1.18",
-        "mockery/mockery": "^1.4.4",
-        "nunomaduro/collision": "^7.0",
-        "phpunit/phpunit": "^10.1",
-        "spatie/laravel-ignition": "^2.0"
+        "spatie/laravel-ignition": "^2.0",
+        "fakerphp/faker": "^1.17",
+        "laravel/sail": "^1.12",
+        "mockery/mockery": "^1.4.2",
+        "nunomaduro/collision": "^8.1",
+        "phpunit/phpunit": "^10.0",
+        "quicker-faster/laravel-code-gen": "dev-main"
+
     },
     "autoload": {
         "psr-4": {
             "App\\": "app/",
             "Database\\Factories\\": "database/factories/",
-            "Database\\Seeders\\": "database/seeders/",
-            "QuickerFaster\\CodeGen\\": "src/"
-
+            "Database\\Seeders\\": "database/seeders/"
         }
     },
     "autoload-dev": {
@@ -43,7 +43,7 @@
             "@php artisan package:discover --ansi"
         ],
         "post-update-cmd": [
-            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+            "@php artisan vendor:publish --tag=laravel-assets --ansi"
         ],
         "post-root-package-install": [
             "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
@@ -60,23 +60,19 @@
     "config": {
         "optimize-autoloader": true,
         "preferred-install": "dist",
-        "sort-packages": true,
-        "allow-plugins": {
-            "pestphp/pest-plugin": true,
-            "php-http/discovery": true
-        }
+        "sort-packages": true
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true,
 
     "repositories": [
-
-
         {
             "type": "vcs",
-            "url": "https://github.com/honestee2013/my-laravel-packages.git"
+            "url": "https://github.com/honestee2013/laravel-ui.git"
+        },
+        {
+            "type": "vcs",
+            "url": "https://github.com/honestee2013/laravel-code-gen.git"
         }
-
     ]
-
 }
