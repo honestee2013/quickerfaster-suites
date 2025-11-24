@@ -170,6 +170,11 @@ return [
         App\Providers\RouteServiceProvider::class,
 
 
+         // Custom Providers
+        App\Providers\TenancyServiceProvider::class,
+        QuickerFaster\LaravelUI\Providers\QuickerFasterLaravelUIServiceProvider::class,
+
+
     ])->toArray(),
 
     /*
