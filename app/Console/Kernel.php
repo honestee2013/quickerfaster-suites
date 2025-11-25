@@ -4,9 +4,18 @@ namespace App\Console;
 
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use QuickerFaster\LaravelUI\Commands\ReplenishTenantDatabases;
+
 
 class Kernel extends ConsoleKernel
 {
+
+  protected $commands = [
+        ReplenishTenantDatabases::class,
+        // Add other custom commands here
+    ];
+
+
     /**
      * Define the application's command schedule.
      */
