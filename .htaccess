@@ -1,27 +1,12 @@
-Options +FollowSymLinks
-Options +SymLinksIfOwnerMatch
-Options -MultiViews -Indexes
-
 <IfModule mod_rewrite.c>
     RewriteEngine On
 
-    # Ensure Authorization header passes through
+    # Handle Authorization header for Sanctum
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
-    # If request is not a directory
-    RewriteCond %{REQUEST_FILENAME} !-d
-
-    # If request is not a file
+    # Laravel front controller
     RewriteCond %{REQUEST_FILENAME} !-f
-
-    # Send everything to index.php
+    RewriteCond %{REQUEST_FILENAME} !-d
     RewriteRule ^ index.php [L]
 </IfModule>
-
-# php -- BEGIN cPanel-generated handler, do not edit
-# Set the “alt-php83” package as the default “PHP” programming language.
-<IfModule mime_module>
-  AddHandler application/x-httpd-alt-php83 .php .php8 .phtml
-</IfModule>
-# php -- END cPanel-generated handler, do not edit
