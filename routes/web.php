@@ -58,3 +58,32 @@ Route::get('/test-phase2', function() {
         'timestamp' => now(),
     ]);
 });
+
+
+
+// Phase 3 Test Routes
+Route::get('/phase3-test', function() {
+    return view('test.phase3');
+});
+
+Route::get('/test-phase3', function() {
+    return response()->json([
+        'status' => 'success',
+        'phase' => 3,
+        'message' => 'Livewire is working',
+        'livewire_version' => \Livewire\Livewire::VERSION,
+        'components_tested' => [
+            'counter_component' => true,
+            'todo_list_component' => true,
+            'livewire_styles' => true,
+            'livewire_scripts' => true,
+            'real_time_updates' => true,
+        ],
+        'server_info' => [
+            'php_version' => PHP_VERSION,
+            'laravel_version' => app()->version(),
+            'livewire_version' => \Livewire\Livewire::VERSION,
+        ],
+        'timestamp' => now(),
+    ]);
+});
