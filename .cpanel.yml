@@ -27,6 +27,15 @@ deployment:
     - /bin/echo "Copying files to deployment path..." >> $LOGFILE
     - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^(\.git|\.env|\.cpanel\.yml)$") "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
+
+    # Copy public folder contents
+    - cp -r public/* $DEPLOYPATH/ >> $LOGFILE 2>&1
+
+    # Copy other necessary files
+    - cp .env.example $DEPLOYPATH/.env >> $LOGFILE 2>&1
+    - cp index.php.deployment $DEPLOYPATH/index.php >> $LOGFILE 2>&1
+
+
     # Ensure Laravel storage and cache directories exist and are writable
     - /bin/echo "Ensuring Laravel storage and cache folders exist..." >> $LOGFILE
     - /bin/sh -c '/bin/mkdir -p $DEPLOYPATH/storage/framework/cache/data \
