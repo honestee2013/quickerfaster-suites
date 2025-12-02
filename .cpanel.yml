@@ -1,23 +1,44 @@
-# .cpanel.yml - Add these lines
 deployment:
   tasks:
+    # Paths
+    - export COMPOSER_BIN=/home/quickerf/composer.phar
+    # - export REPOPATH=/home/quickerf/laravel_suites_repo/suites.quickerfaster.com
+    # - export DEPLOYPATH=/home/quickerf/public_html/suites.quickerfaster.com
+    - export REPOPATH=/home/quickerf/laravel_suites_repo/progressive-saas
     - export DEPLOYPATH=/home/quickerf/public_html/progressive
-    - export LOGFILE=/home/quickerf/deploy_logs/progressive_$(date +"%Y-%m-%d_%H-%M-%S").log
+    - export LOGDIR=/home/quickerf/deploy_logs
+    - mkdir -p $LOGDIR
+    - export LOGFILE=$LOGDIR/deploy_$(date +"%Y-%m-%d_%H-%M-%S").log
 
-    - echo "=== Deployment Started ===" > $LOGFILE
+    # Start log
+    - /bin/echo "======= Deployment started at $(date) =======" >> $LOGFILE
 
-    # 1. Clean deployment area (but keep vendor if exists)
-    - rm -rf $DEPLOYPATH/app $DEPLOYPATH/bootstrap $DEPLOYPATH/config $DEPLOYPATH/database $DEPLOYPATH/public $DEPLOYPATH/resources $DEPLOYPATH/routes $DEPLOYPATH/storage $DEPLOYPATH/tests $DEPLOYPATH/vendor >> $LOGFILE 2>&1
+    # Pull latest changes from GitHub
+    - /bin/echo "Pulling latest changes from GitHub..." >> $LOGFILE
+    - cd $REPOPATH && /usr/bin/git pull origin main >> $LOGFILE 2>&1
 
-    # 2. Copy ALL project files (not just public)
-    - cp -r * $DEPLOYPATH/ 2>/dev/null || true
-    - cp -r .* $DEPLOYPATH/ 2>/dev/null || true
+    # Clean destination folder but preserve .env, .cpanel.yml, storage, bootstrap/cache
+    - /bin/echo "Cleaning destination folder..." >> $LOGFILE
+    - /bin/sh -c 'for f in $(/bin/ls -A "$DEPLOYPATH"); do
+        [ "$f" = ".env" ] || [ "$f" = ".cpanel.yml" ] || [ "$f" = "storage" ] || [ "$f" = "bootstrap/cache" ] || /bin/rm -rf "$DEPLOYPATH/$f";
+      done' >> $LOGFILE 2>&1
 
-    # 3. Remove files that shouldn't be in public
-    - rm -rf $DEPLOYPATH/.git $DEPLOYPATH/.cpanel.yml $DEPLOYPATH/README.md >> $LOGFILE 2>&1
+    # Copy repository files to deployment path
+    - /bin/echo "Copying files to deployment path..." >> $LOGFILE
+    - /bin/sh -c 'cd "$REPOPATH" && /bin/cp -a $(/bin/ls -A | grep -vE "^(\.git|\.env|\.cpanel\.yml)$") "$DEPLOYPATH"' >> $LOGFILE 2>&1
 
-    # 4. Set permissions
-    - chmod -R 755 $DEPLOYPATH/storage $DEPLOYPATH/bootstrap/cache >> $LOGFILE 2>&1
+
+    # Copy public folder contents
+    - cp -r public/* $DEPLOYPATH/ >> $LOGFILE 2>&1
+
+    # Copy other necessary files
+    - cp .env.example $DEPLOYPATH/.env >> $LOGFILE 2>&1
+    - cp index.php.deployment $DEPLOYPATH/index.php >> $LOGFILE 2>&1
+
+
+
+
+
 
     # 5. Update .env for subdirectory
     - echo "APP_URL=https://quickerfaster.com/progressive" > $DEPLOYPATH/.env
@@ -36,28 +57,48 @@ deployment:
 
 
 
-    # Add after setting .env
-    # Update Livewire config
-    - echo "Updating Livewire configuration..." >> $LOGFILE
-    - sed -i "s/'asset_url' => null/'asset_url' => '\/progressive'/g" $DEPLOYPATH/config/livewire.php >> $LOGFILE 2>&1
-    - sed -i "s/'app_url' => null/'app_url' => '\/progressive'/g" $DEPLOYPATH/config/livewire.php >> $LOGFILE 2>&1
-
-    # Clear config cache
-    - cd $DEPLOYPATH && php artisan config:clear >> $LOGFILE 2>&1
-    - cd $DEPLOYPATH && php artisan livewire:discover >> $LOGFILE 2>&1
 
 
 
+    # Ensure Laravel storage and cache directories exist and are writable
+    - /bin/echo "Ensuring Laravel storage and cache folders exist..." >> $LOGFILE
+    - /bin/sh -c '/bin/mkdir -p $DEPLOYPATH/storage/framework/cache/data \
+                   $DEPLOYPATH/storage/framework/sessions \
+                   $DEPLOYPATH/storage/framework/views \
+                   $DEPLOYPATH/bootstrap/cache \
+                   $DEPLOYPATH/storage/logs' >> $LOGFILE 2>&1
 
-    # 6. Run Composer install if vendor doesn't exist
-    - if [ ! -d "$DEPLOYPATH/vendor" ]; then
-        echo "Installing Composer dependencies..." >> $LOGFILE
-        cd $DEPLOYPATH && composer install --no-dev --optimize-autoloader >> $LOGFILE 2>&1
-      fi
+    # Install Composer locally if missing
+    - /bin/echo "Checking Composer..." >> $LOGFILE
+    - /bin/sh -c 'if [ ! -f "$COMPOSER_BIN" ]; then
+        /bin/echo "Downloading Composer..." >> $LOGFILE &&
+        cd /home/quickerf &&
+        /usr/bin/curl -sS https://getcomposer.org/installer -o composer-setup.php &&
+        ea-php84 composer-setup.php --quiet &&
+        rm composer-setup.php &&
+        /bin/echo "Composer installed successfully" >> $LOGFILE;
+      fi'
+
+    # Install PHP dependencies without running scripts (prevents cache errors)
+    - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
+    - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 "$COMPOSER_BIN" install --no-dev --no-scripts --optimize-autoloader >> "$LOGFILE" 2>&1'
+
+
+
+
 
     # 7. Clear caches
     - cd $DEPLOYPATH && php artisan config:clear >> $LOGFILE 2>&1
     - cd $DEPLOYPATH && php artisan route:clear >> $LOGFILE 2>&1
     - cd $DEPLOYPATH && php artisan view:clear >> $LOGFILE 2>&1
 
-    - echo "=== Deployment Complete ===" >> $LOGFILE
+
+
+
+
+    # End log
+    - /bin/echo "===== Deployment finished at $(date) =====" >> $LOGFILE
+
+    # Rotate logs - keep only last 5
+    - /bin/ls -1t $LOGDIR/deploy_*.log | /usr/bin/tail -n +6 | /bin/xargs -r /bin/rm --
+
