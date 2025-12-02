@@ -61,6 +61,17 @@ deployment:
 
 
 
+
+
+    # 7. Clear caches
+    - cd $DEPLOYPATH && php artisan config:clear >> $LOGFILE 2>&1
+    - cd $DEPLOYPATH && php artisan route:clear >> $LOGFILE 2>&1
+    - cd $DEPLOYPATH && php artisan view:clear >> $LOGFILE 2>&1
+
+
+
+
+
     # End log
     - /bin/echo "===== Deployment finished at $(date) =====" >> $LOGFILE
 
