@@ -147,3 +147,37 @@ Route::get('/diagnose-livewire', function() {
 
 
 
+
+Route::get('/test-livewire-fix', function() {
+    // Test 1: Check route generation
+    $updateRoute = route('livewire.update', [], false);
+
+    // Test 2: Check if Livewire can generate proper URLs
+    $scriptUrl = \Livewire\Mechanisms\FrontendAssets\FrontendAssets::generateAssetUrl('livewire.js');
+
+    return response()->json([
+        'test_1_route_generation' => [
+            'expected' => '/progressive/livewire/update',
+            'actual' => $updateRoute,
+            'matches' => $updateRoute === '/progressive/livewire/update',
+        ],
+        'test_2_asset_generation' => [
+            'expected' => '/progressive/livewire/livewire.js',
+            'actual' => $scriptUrl,
+            'matches' => str_contains($scriptUrl, '/progressive/livewire/livewire.js'),
+        ],
+        'config_values' => [
+            'app_url' => config('app.url'),
+            'livewire_app_url' => config('livewire.app_url'),
+            'livewire_asset_url' => config('livewire.asset_url'),
+        ],
+        'instructions' => [
+            'if_test1_fails' => 'Route generation is broken - check RouteServiceProvider',
+            'if_test2_fails' => 'Asset URL generation is broken - check livewire.php config',
+            'if_both_fail' => 'Subdirectory configuration needs fixing',
+        ]
+    ]);
+});
+
+
+

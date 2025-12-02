@@ -98,6 +98,34 @@
     <!-- Bootstrap 5 JS Bundle (with Popper) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+
+
+
+
+
+
+
+
+<!-- In resources/views/layouts/app.blade.php, before @livewireScripts -->
+<script>
+    // Fix Livewire endpoint for subdirectory
+    if (typeof Livewire !== 'undefined') {
+        // Override Livewire's default endpoint
+        Livewire.config.appUrl = 'https://quickerfaster.com/progressive';
+
+        // Or set it dynamically
+        Livewire.hook('request', ({uri, options}) => {
+            // Ensure requests go to /progressive subdirectory
+            if (uri.startsWith('livewire/')) {
+                options.baseURL = '/progressive';
+            }
+        });
+
+        console.log('Livewire configured for subdirectory:', Livewire.config.appUrl);
+    }
+</script>
+
+
     <!-- Livewire Scripts -->
     @livewireScripts
 

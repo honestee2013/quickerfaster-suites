@@ -1,12 +1,23 @@
-# .cpanel.yml - Add these lines
 deployment:
   tasks:
+    # Paths
+    - export COMPOSER_BIN=/home/quickerf/composer.phar
+    # - export REPOPATH=/home/quickerf/laravel_suites_repo/suites.quickerfaster.com
+    # - export DEPLOYPATH=/home/quickerf/public_html/suites.quickerfaster.com
+    - export REPOPATH=/home/quickerf/laravel_suites_repo/progressive-saas
     - export DEPLOYPATH=/home/quickerf/public_html/progressive
-    - export LOGFILE=/home/quickerf/deploy_logs/progressive_$(date +"%Y-%m-%d_%H-%M-%S").log
+    - export LOGDIR=/home/quickerf/deploy_logs
+    - mkdir -p $LOGDIR
+    - export LOGFILE=$LOGDIR/deploy_$(date +"%Y-%m-%d_%H-%M-%S").log
 
-    - echo "=== Deployment Started ===" > $LOGFILE
+    # Start log
+    - /bin/echo "======= Deployment started at $(date) =======" >> $LOGFILE
 
-    # 1. Clean deployment area (but keep vendor if exists)
+
+
+
+
+        # 1. Clean deployment area (but keep vendor if exists)
     - rm -rf $DEPLOYPATH/app $DEPLOYPATH/bootstrap $DEPLOYPATH/config $DEPLOYPATH/database $DEPLOYPATH/public $DEPLOYPATH/resources $DEPLOYPATH/routes $DEPLOYPATH/storage $DEPLOYPATH/tests $DEPLOYPATH/vendor >> $LOGFILE 2>&1
 
     # 2. Copy ALL project files (not just public)
@@ -33,21 +44,6 @@ deployment:
     - echo "DB_DATABASE=your_database" >> $DEPLOYPATH/.env
     - echo "DB_USERNAME=your_username" >> $DEPLOYPATH/.env
     - echo "DB_PASSWORD=your_password" >> $DEPLOYPATH/.env
-
-
-
-    # Add after setting .env
-    # Update Livewire config
-    - echo "Updating Livewire configuration..." >> $LOGFILE
-    - sed -i "s/'asset_url' => null/'asset_url' => '\/progressive'/g" $DEPLOYPATH/config/livewire.php >> $LOGFILE 2>&1
-    - sed -i "s/'app_url' => null/'app_url' => '\/progressive'/g" $DEPLOYPATH/config/livewire.php >> $LOGFILE 2>&1
-
-    # Clear config cache
-    - cd $DEPLOYPATH && php artisan config:clear >> $LOGFILE 2>&1
-    - cd $DEPLOYPATH && php artisan livewire:discover >> $LOGFILE 2>&1
-
-
-
 
     # 6. Run Composer install if vendor doesn't exist
     - if [ ! -d "$DEPLOYPATH/vendor" ]; then
