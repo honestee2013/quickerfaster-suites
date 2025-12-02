@@ -87,3 +87,63 @@ Route::get('/test-phase3', function() {
         'timestamp' => now(),
     ]);
 });
+
+
+
+// Add this temporary route for debugging
+Route::get('/debug-livewire', function() {
+    $routes = Route::getRoutes()->getRoutes();
+    $livewireRoutes = [];
+
+    foreach ($routes as $route) {
+        if (strpos($route->uri, 'livewire') !== false) {
+            $livewireRoutes[] = [
+                'uri' => $route->uri,
+                'methods' => $route->methods,
+                'action' => $route->action['controller'] ?? 'Closure',
+            ];
+        }
+    }
+
+    return response()->json([
+        'livewire_routes_registered' => $livewireRoutes,
+        'livewire_service_provider' => class_exists('Livewire\LivewireServiceProvider'),
+        'app_url' => config('app.url'),
+        'asset_url' => config('app.asset_url'),
+        'current_url' => url()->current(),
+        'base_path' => base_path(),
+    ]);
+});
+
+
+
+Route::get('/diagnose-livewire', function() {
+    // Check if Livewire routes are working
+    try {
+        $testRoute = route('livewire.message', ['name' => 'test'], false);
+        $routeWorks = true;
+    } catch (\Exception $e) {
+        $testRoute = null;
+        $routeWorks = false;
+    }
+
+    return response()->json([
+        'diagnosis' => 'Livewire Route Check',
+        'livewire_update_endpoint' => url('/livewire/update'),
+        'livewire_message_route' => $testRoute,
+        'route_registration_works' => $routeWorks,
+        'app_url' => config('app.url'),
+        'current_url' => url()->current(),
+        'is_subdirectory' => strpos(url()->current(), '/progressive') !== false,
+        'suggested_fix' => 'Ensure APP_URL includes /progressive subdirectory',
+        'check_these' => [
+            '1. APP_URL in .env must include /progressive',
+            '2. RouteServiceProvider should handle subdirectory',
+            '3. .htaccess should allow Laravel routing',
+            '4. Livewire service provider must be registered',
+        ]
+    ]);
+});
+
+
+
