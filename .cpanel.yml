@@ -36,30 +36,6 @@ deployment:
     - cp index.php.deployment $DEPLOYPATH/index.php >> $LOGFILE 2>&1
 
 
-
-
-
-
-    # 5. Update .env for subdirectory
-    - echo "APP_URL=https://quickerfaster.com/progressive" > $DEPLOYPATH/.env
-    - echo "ASSET_URL=https://quickerfaster.com/progressive" >> $DEPLOYPATH/.env
-    - echo "APP_NAME=ProgressiveSaaS" >> $DEPLOYPATH/.env
-    - echo "APP_ENV=production" >> $DEPLOYPATH/.env
-    - echo "APP_DEBUG=true" >> $DEPLOYPATH/.env
-
-    # Database config (use your existing)
-    - echo "DB_CONNECTION=mysql" >> $DEPLOYPATH/.env
-    - echo "DB_HOST=localhost" >> $DEPLOYPATH/.env
-    - echo "DB_PORT=3306" >> $DEPLOYPATH/.env
-    - echo "DB_DATABASE=your_database" >> $DEPLOYPATH/.env
-    - echo "DB_USERNAME=your_username" >> $DEPLOYPATH/.env
-    - echo "DB_PASSWORD=your_password" >> $DEPLOYPATH/.env
-
-
-
-
-
-
     # Ensure Laravel storage and cache directories exist and are writable
     - /bin/echo "Ensuring Laravel storage and cache folders exist..." >> $LOGFILE
     - /bin/sh -c '/bin/mkdir -p $DEPLOYPATH/storage/framework/cache/data \
@@ -82,17 +58,6 @@ deployment:
     # Install PHP dependencies without running scripts (prevents cache errors)
     - /bin/echo "Installing PHP dependencies..." >> $LOGFILE
     - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 "$COMPOSER_BIN" install --no-dev --no-scripts --optimize-autoloader >> "$LOGFILE" 2>&1'
-
-
-
-
-
-    # 7. Clear caches
-    - cd $DEPLOYPATH && php artisan config:clear >> $LOGFILE 2>&1
-    - cd $DEPLOYPATH && php artisan route:clear >> $LOGFILE 2>&1
-    - cd $DEPLOYPATH && php artisan view:clear >> $LOGFILE 2>&1
-
-
 
 
 

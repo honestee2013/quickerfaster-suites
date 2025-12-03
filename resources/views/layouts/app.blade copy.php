@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -14,7 +13,8 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
 
-
+    <!-- Livewire Styles -->
+    @livewireStyles
 
     <!-- Custom CSS -->
     <style>
@@ -47,7 +47,6 @@
 
     @stack('styles')
 </head>
-
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-4">
@@ -103,7 +102,60 @@
 
 
 
+
+
+
+
+<!-- In resources/views/layouts/app.blade.php, before @livewireScripts -->
+<script>
+    // Fix Livewire endpoint for subdirectory
+    if (typeof Livewire !== 'undefined') {
+        // Override Livewire's default endpoint
+        Livewire.config.appUrl = 'https://quickerfaster.com/progressive';
+
+        // Or set it dynamically
+        Livewire.hook('request', ({uri, options}) => {
+            // Ensure requests go to /progressive subdirectory
+            if (uri.startsWith('livewire/')) {
+                options.baseURL = '/progressive';
+            }
+        });
+
+        console.log('Livewire configured for subdirectory:', Livewire.config.appUrl);
+    }
+</script>
+
+
+    <!-- Livewire Scripts -->
+    @livewireScripts
+
+    <!-- Custom JS -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Phase 3: Livewire loaded successfully');
+
+            // Listen for Livewire events
+            Livewire.on('component-mounted', (component) => {
+                console.log('Livewire component mounted:', component.id);
+            });
+
+            Livewire.on('component-updated', (component) => {
+                console.log('Livewire component updated:', component.id);
+            });
+        });
+
+        // Debug function to check Livewire status
+        window.checkLivewire = function() {
+            if (typeof Livewire === 'undefined') {
+                console.error('Livewire is not loaded!');
+                return false;
+            }
+            console.log('Livewire version:', Livewire.version);
+            console.log('Alpine version:', Alpine?.version);
+            return true;
+        };
+    </script>
+
     @stack('scripts')
 </body>
-
 </html>
