@@ -65,13 +65,6 @@ deployment:
     - /bin/sh -c 'cd "$DEPLOYPATH" && ea-php84 artisan view:cache >> "$LOGFILE" 2>&1'
 
 
-    # Run migrations
-    # - /bin/echo "Running migrations..." >> $LOGFILE
-    # - /bin/sh -c 'ea-php84 "$DEPLOYPATH/artisan" migrate --force >> "$LOGFILE" 2>&1'
-
-    # Seed database
-    # - /bin/echo "Seeding database..." >> $LOGFILE
-    # - /bin/sh -c 'ea-php84 "$DEPLOYPATH/artisan" db:seed --force >> "$LOGFILE" 2>&1'
 
     # Final cache cleanup
     - /bin/echo "Clearing caches..." >> $LOGFILE
